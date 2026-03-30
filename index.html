@@ -30,7 +30,7 @@
         }
 
         .header-logo { text-align: center; margin-bottom: 30px; }
-        .header-logo img { max-height: 50px; width: auto; }
+        .header-logo img { max-height: 55px; width: auto; }
 
         .container {
             max-width: 1200px; margin: auto; background: white;
@@ -58,23 +58,21 @@
         }
         button:hover { background-color: var(--tecno-light-blue); }
         
-        /* Report & PDF Safe Styles (No Flexbox per html2pdf) */
+        /* Layout Report Rigido per PDF */
         #reportSection { display: none; }
+        #printableReport { background: white; }
         
-        .norms-container { display: block; width: 100%; }
         .norm-box { 
-            display: inline-block; width: 48%; box-sizing: border-box; 
-            vertical-align: top; margin-right: 1%; margin-bottom: 15px;
+            display: inline-block; width: 47%; box-sizing: border-box; 
+            vertical-align: top; margin-right: 2%; margin-bottom: 15px;
             padding: 15px; border-radius: 8px;
-            page-break-inside: avoid; break-inside: avoid;
         }
         
         .norm-active { background-color: var(--active-norm); border-left: 5px solid var(--active-border); }
         .norm-upcoming { background-color: var(--upcoming-norm); border-left: 5px solid var(--upcoming-border); }
         .norm-date { font-size: 13px; color: #555; margin-top: 5px; font-style: italic; }
         
-        .page-break { page-break-before: always; clear: both; padding-top: 20px; }
-        .avoid-break { page-break-inside: avoid; break-inside: avoid; }
+        .page-break { page-break-before: always; clear: both; padding-top: 20px; margin-top: 20px; border-top: 1px dashed #ccc; }
         
         .chart-container { position: relative; height: 450px; width: 100%; margin-top: 20px; background: white; }
     </style>
@@ -82,9 +80,7 @@
 <body>
 
 <div class="header-logo">
-    <img src="https://www.tecno-group.eu/wp-content/uploads/2024/10/Tecno-1.svg" 
-         onerror="this.onerror=null; this.src='tecno-logo.png';" 
-         alt="Tecno Group Logo" crossorigin="anonymous" id="mainLogo">
+    <img src="Logo.Tecno-ESG.jpg" alt="Tecno Group Logo" id="mainLogo">
 </div>
 
 <div class="container" id="appContainer">
@@ -96,6 +92,7 @@
             <h2>1. Anagrafica Aziendale</h2>
             <div class="form-group"><label>Nome azienda</label><input type="text" id="companyName"></div>
             <div class="form-group"><label>P.Iva</label><input type="text" id="vat"></div>
+            <div class="form-group"><label>Indirizzo sito web (Utilizzato per analisi Greenwashing e Supply Chain)</label><input type="text" id="website" placeholder="es. www.azienda.it"></div>
             
             <div class="form-group">
                 <label>Settore (Selezione multipla - tieni premuto Ctrl/Cmd)</label>
@@ -121,6 +118,7 @@
             </div>
             <div class="form-group"><label>Numero dipendenti</label><input type="number" id="employees"></div>
             <div class="form-group"><label>Fatturato Annuale (€)</label><input type="number" id="revenue"></div>
+            <div class="form-group"><label>Totale Stato Patrimoniale (€)</label><input type="number" id="assets"></div>
         </div>
 
         <div class="section">
@@ -222,7 +220,7 @@
             
             <div>
                 <div style="text-align: right; margin-bottom: 20px;">
-                    <img id="pdfLogo1" src="" alt="Tecno Group Logo" style="height: 40px;">
+                    <img id="pdfLogo1" src="Logo.Tecno-ESG.jpg" alt="Tecno Group Logo" style="height: 40px;">
                 </div>
                 <h1>Report Strategico SustainLEX</h1>
                 <h3 id="repCompanyName" style="color: var(--tecno-blue); font-size: 24px; margin-bottom: 5px;"></h3>
@@ -232,12 +230,12 @@
                 <h2>1. Monitoraggio Normative Applicabili (Filtrate per Settore)</h2>
                 <p><i>Legenda: <span style="background:var(--active-norm); padding:3px 8px; border:1px solid var(--active-border);">Verde</span> = Attive | <span style="background:var(--upcoming-norm); padding:3px 8px; border:1px solid var(--upcoming-border);">Giallo</span> = In Attivazione</i></p>
                 
-                <div id="normsList" class="norms-container"></div>
+                <div id="normsList" style="width: 100%;"></div>
             </div>
 
-            <div class="page-break avoid-break">
+            <div class="page-break">
                 <div style="text-align: right; margin-bottom: 10px;">
-                    <img id="pdfLogo2" src="" alt="Tecno" style="height: 30px;">
+                    <img id="pdfLogo2" src="Logo.Tecno-ESG.jpg" alt="Tecno" style="height: 30px;">
                 </div>
                 <h2>2. Matrice di Indirizzo Strategico</h2>
                 <p>Mappatura degli adempimenti in base a <strong>Rilevanza</strong> (Gap interno di compliance, Asse Y) e <strong>Urgenza</strong> (Tempo rimanente alla cogenza normativa, Asse X).</p>
@@ -247,9 +245,9 @@
                 </div>
             </div>
 
-            <div class="page-break avoid-break">
+            <div class="page-break">
                 <div style="text-align: right; margin-bottom: 10px;">
-                    <img id="pdfLogo3" src="" alt="Tecno" style="height: 30px;">
+                    <img id="pdfLogo3" src="Logo.Tecno-ESG.jpg" alt="Tecno" style="height: 30px;">
                 </div>
                 <h2>3. Priorità d'Azione Consigliate</h2>
                 <ul id="actionList" style="line-height: 1.8; font-size: 16px;"></ul>
@@ -264,7 +262,6 @@
 </div>
 
 <script>
-    // Inizializza Plugin DataLabels per Chart.js
     Chart.register(ChartDataLabels);
 
     function toggleConditional(parentId, subId, triggerValue) {
@@ -279,7 +276,6 @@
         }
     }
 
-    // Database Normative aggiornato
     const databaseNorme = [
         { id: 'csrd', name: 'Direttiva UE 2022/2464 (CSRD) + Omnibus 2026/470', status: 'active', date: 'Attiva dal 1° Gennaio 2024' },
         { id: 'csddd', name: 'Direttiva UE 2024/1760 (CSDDD)', status: 'upcoming', date: 'In attivazione dal 2027/2028' },
@@ -296,20 +292,15 @@
         { id: 'conflict', name: 'Regolamento UE 2017/821 (Conflict Minerals)', status: 'active', date: 'Attivo dal 1° Gennaio 2021' }
     ];
 
-    // Mappatura Settori -> Norme
     const normSectorMap = {
-        'csrd': ['Tutti'],
-        'csddd': ['Tutti'],
+        'csrd': ['Tutti'], 'csddd': ['Tutti'], 'ppwr': ['Tutti'], 'greenclaims': ['Tutti'], 'equalpay': ['Tutti'],
         'espr': ['Chimici', 'Plastiche e gomma', 'Tessili', 'Metalli', 'Macchinari', 'Legno', 'Pelle e calzature', 'Costruzione', 'Veicoli', 'Elettronica', 'Carta'],
         'eudr': ['Agricoli e alimentari', 'Plastiche e gomma', 'Legno', 'Cosmetici', 'Carta'],
         'r2r': ['Macchinari', 'Veicoli', 'Elettronica'],
         'micro': ['Agricoli e alimentari', 'Chimici', 'Plastiche e gomma', 'Tessili', 'Pelle e calzature', 'Farmaceutici', 'Cosmetici'],
         'cbam': ['Chimici', 'Metalli', 'Minerali e combustibili', 'Costruzione'],
-        'ppwr': ['Tutti'],
-        'greenclaims': ['Tutti'],
         'batteries': ['Macchinari', 'Veicoli', 'Elettronica'],
         'crma': ['Chimici', 'Metalli', 'Macchinari', 'Minerali e combustibili', 'Veicoli', 'Elettronica'],
-        'equalpay': ['Tutti'],
         'conflict': ['Metalli', 'Veicoli', 'Elettronica']
     };
 
@@ -321,19 +312,12 @@
     }
 
     function generateReport() {
-        // Replica il logo caricato con successo nelle intestazioni del PDF
-        const activeLogoSrc = document.getElementById('mainLogo').src;
-        document.getElementById('pdfLogo1').src = activeLogoSrc;
-        document.getElementById('pdfLogo2').src = activeLogoSrc;
-        document.getElementById('pdfLogo3').src = activeLogoSrc;
-
         const companyName = document.getElementById('companyName').value || "Ragione Sociale Non Specificata";
         const selectedSectors = Array.from(document.getElementById('sector').selectedOptions).map(opt => opt.value);
         
         document.getElementById('repCompanyName').innerText = companyName;
         document.getElementById('repSector').innerText = selectedSectors.join(', ') || "Nessun settore selezionato";
 
-        // Filtra le norme in base al settore
         let applicableNorms = databaseNorme.filter(norm => {
             const allowed = normSectorMap[norm.id];
             if (!allowed) return false;
@@ -341,14 +325,12 @@
             return selectedSectors.some(sector => allowed.includes(sector));
         });
 
-        // Ordina: Attive prima, In attivazione dopo
         applicableNorms.sort((a, b) => (a.status === 'active' ? -1 : 1));
 
-        // Stampa elenco norme filtrate
         const normsListDiv = document.getElementById('normsList');
         normsListDiv.innerHTML = '';
         if(applicableNorms.length === 0) {
-            normsListDiv.innerHTML = '<p>Nessuna normativa specifica rilevata per i settori indicati, oltre a quelle trasversali.</p>';
+            normsListDiv.innerHTML = '<p>Nessuna normativa specifica rilevata, oltre a quelle trasversali.</p>';
         } else {
             applicableNorms.forEach(norm => {
                 let div = document.createElement('div');
@@ -358,7 +340,6 @@
             });
         }
 
-        // Calcolo Dati Matrice (Tutte le norme)
         let fullMatrixData = [
             { id: 'csrd', label: 'CSRD', x: 9, y: calcGap(getVal('q1'), getVal('q1_sub'), 'ESRS', 'GRI'), bgColor: '#002b49' },
             { id: 'csddd', label: 'CSDDD', x: 7, y: calcGap(getVal('q3'), getVal('q3_sub'), 'Strutturato', null), bgColor: '#fbbc04' },
@@ -374,11 +355,24 @@
             { id: 'equalpay', label: 'Parità Retrib.', x: 7, y: calcGap(getVal('q16'), getVal('q16_sub'), 'Certificazione', 'Monitora'), bgColor: '#e67e22' }
         ];
 
-        // Filtra i punti del grafico affinché mostrino solo le norme pertinenti al settore
         let matrixData = fullMatrixData.filter(d => applicableNorms.some(n => n.id === d.id));
 
+        // JITTER ALGORITHM - Previene il sormonto dei punti spostandoli leggermente
+        let pointMap = {};
+        matrixData.forEach(d => {
+            let key = `${d.x}_${d.y}`;
+            if(pointMap[key]) {
+                pointMap[key] += 1;
+                // Sposta il punto in modo radiale se sovrapposto (deviazione visiva)
+                let offset = 0.25 * pointMap[key]; 
+                d.x += offset * (Math.random() > 0.5 ? 1 : -1);
+                d.y += offset * (Math.random() > 0.5 ? 1 : -1);
+            } else {
+                pointMap[key] = 1;
+            }
+        });
+
         const ctx = document.getElementById('strategicMatrix').getContext('2d');
-        // Distruggi vecchio grafico se esiste
         if(window.myChart) window.myChart.destroy();
         
         window.myChart = new Chart(ctx, {
@@ -388,20 +382,17 @@
                     label: 'Normative',
                     data: matrixData,
                     backgroundColor: matrixData.map(d => d.bgColor),
-                    pointRadius: 8,
-                    pointHoverRadius: 10
+                    pointRadius: 9,
+                    pointHoverRadius: 12
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    // Configurazione Legenda Diretta sui Punti
                     datalabels: {
-                        align: 'top',
-                        anchor: 'end',
-                        color: '#333',
-                        font: { weight: 'bold', size: 11 },
+                        align: 'end', anchor: 'end', color: '#333',
+                        font: { weight: 'bold', size: 10 },
                         formatter: function(value, context) {
                             return context.dataset.data[context.dataIndex].label;
                         }
@@ -410,25 +401,25 @@
                         callbacks: {
                             label: function(context) {
                                 let point = matrixData[context.dataIndex];
-                                return point.label + ' (Urgenza: ' + point.x + ', Gap: ' + point.y + ')';
+                                // Arrotonda per rimuovere i decimali visivi del Jitter nel tooltip
+                                return point.label + ' (Urgenza: ' + Math.round(point.x) + ', Gap: ' + Math.round(point.y) + ')';
                             }
                         }
                     }
                 },
                 scales: {
-                    x: { title: { display: true, text: 'Urgenza (1=Bassa, 10=Alta/Attiva)', font: {weight: 'bold'} }, min: 0, max: 10 },
+                    x: { title: { display: true, text: 'Urgenza (1=Bassa, 10=Alta)', font: {weight: 'bold'} }, min: 0, max: 10 },
                     y: { title: { display: true, text: 'Rilevanza/Gap (1=Compliance, 10=Nessuna azione)', font: {weight: 'bold'} }, min: 0, max: 10 }
                 }
             }
         });
 
-        // Genera Lista Priorità
         const actionList = document.getElementById('actionList');
         actionList.innerHTML = '';
-        const priorities = matrixData.filter(d => d.x >= 6 && d.y >= 6);
+        const priorities = matrixData.filter(d => Math.round(d.x) >= 6 && Math.round(d.y) >= 6);
         
         if(priorities.length === 0) {
-            actionList.innerHTML = '<li>L\'azienda risulta avere un ottimo livello di preparazione sui fronti pertinenti al proprio settore. Mantenere il monitoraggio.</li>';
+            actionList.innerHTML = '<li>L\'azienda ha un ottimo livello di preparazione. Mantenere il monitoraggio.</li>';
         } else {
             priorities.forEach(d => {
                 let li = document.createElement('li');
@@ -444,20 +435,29 @@
     function exportPDF() {
         const element = document.getElementById('printableReport');
         
+        // Forziamo le dimensioni assolute in pixel del report per l'A4 orizzontale PRIMA dello scatto fotografico
+        // per evitare che HTML2Canvas tagli a metà i blocchi e i grafici se la finestra del browser è ridotta.
+        element.style.width = '1122px';
+        element.style.padding = '20px';
+        
         const opt = {
-            margin:       [10, 10, 10, 10], // top, left, bottom, right in mm
+            margin:       10, // margini in mm uniformi
             filename:     'SustainLEX_Report_Strategico.pdf',
-            image:        { type: 'jpeg', quality: 0.98 },
+            image:        { type: 'jpeg', quality: 1 },
             html2canvas:  { 
                 scale: 2, 
-                useCORS: true, 
-                windowWidth: 1200 // Forza viewport desktop per evitare collasso dei blocchi
+                scrollY: 0, // Evita tagli legati allo scorrimento
+                useCORS: true 
             },
             jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' },
-            pagebreak:    { mode: ['css', 'legacy'], before: '.page-break', avoid: '.avoid-break' }
+            pagebreak:    { mode: ['css', 'legacy'], before: '.page-break' }
         };
 
-        html2pdf().set(opt).from(element).save();
+        // Genera PDF e resetta gli stili di forzatura a processo ultimato
+        html2pdf().set(opt).from(element).save().then(() => {
+            element.style.width = 'auto';
+            element.style.padding = '0';
+        });
     }
 </script>
 </body>
