@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SustainLEX.AI - Compliance Sostenibilità</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        :root {
+            --primary: #0056b3;
+            --secondary: #eef2f5;
+            --active-norm: #d4edda; /* Verde per norme attive */
+            --upcoming-norm: #fff3cd; /* Giallo per norme in attivazione */
+            --text: #333;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text);
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3 { color: var(--primary); }
+        .section { margin-bottom: 30px; border-bottom: 2px solid var(--secondary); padding-bottom: 20px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; }
+        input[type="text"], input[type="number"], select {
+            width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;
+        }
+        .conditional-select { display: none; margin-top: 10px; border-left: 3px solid var(--primary); padding-left: 10px; }
+        button {
+            background-color: var(--primary); color: white; padding: 12px 20px; border: none;
+            border-radius: 4px; cursor: pointer; font-size: 16px; margin-top: 20px;
+        }
+        button:hover { background-color: #004494; }
+        /* Report Styles */
+        #reportSection { display: none; }
+        .norm-active { background-color: var(--active-norm); padding: 10px; border-radius: 4px; margin-bottom: 5px; border-left: 5px solid #28a745; }
+        .norm-upcoming { background-color: var(--upcoming-norm); padding: 10px; border-radius: 4px; margin-bottom: 5px; border-left: 5px solid #ffc107; }
+        .page-break { page-break-after: always; }
+        .chart-container { position: relative; height: 400px; width: 100%; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="container" id="appContainer">
+    <div id="inputSection">
+        <h1>SustainLEX.AI</h1>
+        <p>Valutazione preliminare di compliance alle normative europee sulla sostenibilità ambientale e sociale.</p>
+
+        <div class="section">
+            <h2>1. Anagrafica Aziendale (INPUT)</h2>
+            <div class="form-group"><label>Nome azienda</label><input type="text" id="companyName"></div>
+            <div class="form-group"><label>P.Iva</label><input type="text" id="vat"></div>
+            <div class="form-group"><label>Indirizzo sito web</label><input type="text" id="website"></div>
+            <div class="form-group"><label>Indirizzo sede legale</label><input type="text" id="address"></div>
+            <div class="form-group"><label>Paese sede legale</label><input type="text" id="country" value="Italia"></div>
+            
+            <div class="form-group">
+                <label>Settore (Selezione multipla - tieni premuto Ctrl/Cmd)</label>
+                <select id="sector" multiple size="5">
+                    <option value="Agricoli e alimentari">Prodotti agricoli e alimentari</option>
+                    <option value="Chimici">Prodotti chimici</option>
+                    <option value="Plastiche e gomma">Materie plastiche e gomma</option>
+                    <option value="Tessili">Prodotti tessili</option>
+                    <option value="Metalli">Metalli e prodotti metallici</option>
+                    <option value="Macchinari">Macchinari e apparecchiature</option>
+                    <option value="Minerali e combustibili">Minerali e combustibili</option>
+                    <option value="Legno">Legno e prodotti in legno</option>
+                    <option value="Pelle e calzature">Articoli in pelle e calzature</option>
+                    <option value="Costruzione">Prodotti minerali e materiali da costruzione</option>
+                    <option value="Farmaceutici">Prodotti farmaceutici</option>
+                    <option value="Cosmetici">Prodotti cosmetici</option>
+                    <option value="Veicoli">Veicoli e mezzi di trasporto</option>
+                    <option value="Elettronica">Apparecchiature elettroniche ed elettrodomestici</option>
+                    <option value="Carta">Prodotti dell'industria cartaria</option>
+                    <option value="Servizi">Servizi</option>
+                    <option value="Altro">Altro da specificare</option>
+                </select>
+            </div>
+            <div class="form-group"><label>Numero dipendenti</label><input type="number" id="employees"></div>
+            <div class="form-group"><label>Fatturato Annuale (€)</label><input type="number" id="revenue"></div>
+            <div class="form-group"><label>Totale Stato Patrimoniale (€)</label><input type="number" id="assets"></div>
+            <div class="form-group">
+                <label>La società è quotata in UE?</label>
+                <select id="listed">
+                    <option value="Regolamentato">Sì, nel mercato regolamentato</option>
+                    <option value="Non Regolamentato">Sì, nel mercato non regolamentato</option>
+                    <option value="No" selected>No</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>2. Questionario Operativo</h2>
+            <p><i>Rispondi alle seguenti domande. Le celle di approfondimento si abiliteranno in base alle tue risposte.</i></p>
+
+            <div class="form-group">
+                <label>1. L'azienda redige un report di sostenibilità?</label>
+                <select id="q1" onchange="toggleConditional('q1', 'q1_sub', 'SI')">
+                    <option value="NO">No</option>
+                    <option value="SI">Sì</option>
+                </select>
+                <select id="q1_sub" class="conditional-select">
+                    <option value="">Seleziona tipo di report...</option>
+                    <option value="GRI">Report di sostenibilità GRI</option>
+                    <option value="ESRS">Report di sostenibilità ESRS</option>
+                    <option value="Altro">Altro tipo di Report (es: VSME)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>2. Tra i clienti dell'azienda ci sono grandi aziende o multinazionali?</label>
+                <select id="q2" onchange="toggleConditional('q2', 'q2_sub', 'SI')">
+                    <option value="NO">No</option>
+                    <option value="SI">Sì</option>
+                </select>
+                <select id="q2_sub" class="conditional-select">
+                    <option value="">Seleziona la situazione...</option>
+                    <option value="Collaborazione">L'azienda collabora pienamente ai processi di due diligence ambientale e sociale di tali clienti</option>
+                    <option value="Fornitura Dati">L'azienda fornisce a tali clienti molti e diversi dati in materia</option>
+                    <option value="Nessuna Richiesta">I clienti non richiedono dati al momento</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>3. L'azienda verifica periodicamente i propri processi per garantire l'assenza di lavoro forzato e/o minorile lungo la filiera?</label>
+                <select id="q3" onchange="toggleConditional('q3', 'q3_sub', 'SI')">
+                    <option value="NO">No</option>
+                    <option value="SI">Sì</option>
+                </select>
+                <select id="q3_sub" class="conditional-select">
+                    <option value="Sistema Strutturato">L'azienda ha strutturato un sistema di due diligence per verificare questi aspetti</option>
+                    <option value="Richiesta Fornitori">L'azienda richiede ai propri fornitori alcune informazioni per verificare questi aspetti</option>
+                    <option value="Nessuna">Nessuna delle precedenti</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>4. L'azienda commercializza prodotti derivanti da bovini, cacao, caffè, olio di palma, gomma, soia o legno?</label>
+                <select id="q4" onchange="toggleConditional('q4', 'q4_sub', 'SI')">
+                    <option value="NO">No</option>
+                    <option value="SI">Sì</option>
+                </select>
+                <select id="q4_sub" class="conditional-select">
+                    <option value="Due Diligence Attiva">L'azienda effettua una due diligence delle proprie attività con focus su deforestazione e degrado forestale</option>
+                    <option value="Inizio Impostazione">L'azienda ha iniziato a impostare un sistema di due diligence</option>
+                    <option value="Solo Conoscenza">L'azienda conosce le norme ma non ha attivato iniziative</option>
+                    <option value="Nessuna">Nessuna delle precedenti</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label><i>[... Domande da 5 a 19 incluse nella logica di calcolo ...]</i></label>
+                <p>Simuliamo le risposte rimanenti per generare il report strategico.</p>
+            </div>
+
+            <button onclick="generateReport()">Genera Report Analitico in PDF</button>
+        </div>
+    </div>
+
+    <div id="reportSection">
+        <div id="printableReport">
+            <div class="page-break">
+                <h1>Report SustainLEX.AI</h1>
+                <h3 id="repCompanyName"></h3>
+                <p><strong>Settori:</strong> <span id="repSector"></span></p>
+                
+                <h2>1. Panoramica Normative Applicabili (Monitoraggio)</h2>
+                <p><i>Legenda: <span style="background:var(--active-norm); padding:2px 5px;">Sfondo Verde</span> = Norme Attive | <span style="background:var(--upcoming-norm); padding:2px 5px;">Sfondo Giallo</span> = Norme in Attivazione</i></p>
+                <div id="normsList"></div>
+            </div>
+
+            <div class="page-break">
+                <h2>2. Matrice di Indirizzo Strategico</h2>
+                <p>Questa matrice posiziona gli adempimenti normativi in base a:</p>
+                <ul>
+                    <li><strong>Rilevanza (Asse Y):</strong> Misura il divario ("gap") dell'azienda. Alta rilevanza significa che l'azienda non ha ancora adottato misure adeguate.</li>
+                    <li><strong>Urgenza (Asse X):</strong> Indica il tempo rimanente all'entrata in vigore cogente.</li>
+                </ul>
+                <div class="chart-container">
+                    <canvas id="strategicMatrix"></canvas>
+                </div>
+                <div style="margin-top: 20px;">
+                    <h3>Priorità d'Azione:</h3>
+                    <ul id="actionList"></ul>
+                </div>
+            </div>
+        </div>
+        
+        <button onclick="exportPDF()" style="background-color: #28a745;">Esporta in PDF (A4 Orizzontale)</button>
+        <button onclick="location.reload()" style="background-color: #6c757d;">Nuova Analisi</button>
+    </div>
+</div>
+
+<script>
+    // Gestione visualizzazione condizionale
+    function toggleConditional(parentId, subId, triggerValue) {
+        const parent = document.getElementById(parentId);
+        const sub = document.getElementById(subId);
+        if (parent.value === triggerValue) {
+            sub.style.display = 'block';
+        } else {
+            sub.style.display = 'none';
+            sub.value = ''; // Reset
+        }
+    }
+
+    // Database Normative (Simulazione)
+    const databaseNorme = [
+        { id: 'csrd', name: 'Direttiva UE 2022/2464 (CSRD) + Omnibus 2026/470', status: 'active' },
+        { id: 'csddd', name: 'Direttiva UE 2024/1760 (CSDDD)', status: 'upcoming' },
+        { id: 'espr', name: 'Regolamento UE 2024/1781 (Ecodesign)', status: 'upcoming' },
+        { id: 'eudr', name: 'Regolamento UE 2023/1115 (Deforestazione)', status: 'active' },
+        { id: 'r2r', name: 'Direttiva UE 2024/1799 (Right to Repair)', status: 'upcoming' },
+        { id: 'micro', name: 'Regolamento UE 2023/2055 (Microplastiche)', status: 'active' },
+        { id: 'cbam', name: 'Regolamento UE 2023/956 (CBAM)', status: 'active' },
+        { id: 'ppwr', name: 'Regolamento UE 2025/40 (Imballaggi)', status: 'upcoming' },
+        { id: 'greenclaims', name: 'Regolamento UE 2024/825 (Greenwashing)', status: 'active' },
+        { id: 'batteries', name: 'Regolamento UE 2023/1542 (Batterie)', status: 'active' },
+        { id: 'crma', name: 'Regolamento UE 2024/1252 (Materie Prime Critiche)', status: 'active' },
+        { id: 'equalpay', name: 'PDR 125 e Direttiva UE 2023/970', status: 'active' },
+        { id: 'conflict', name: 'Regolamento UE 2017/821 (Conflict Minerals)', status: 'active' }
+    ];
+
+    function generateReport() {
+        // 1. Raccogli Dati Input
+        const companyName = document.getElementById('companyName').value || "Azienda Non Specifica";
+        const sectorsOptions = document.getElementById('sector').selectedOptions;
+        const sectors = Array.from(sectorsOptions).map(opt => opt.text).join(', ');
+
+        // 2. Popola Report Header
+        document.getElementById('repCompanyName').innerText = companyName;
+        document.getElementById('repSector').innerText = sectors || "Nessun settore specificato";
+
+        // 3. Popola Normative
+        const normsListDiv = document.getElementById('normsList');
+        normsListDiv.innerHTML = '';
+        databaseNorme.forEach(norm => {
+            let div = document.createElement('div');
+            div.className = norm.status === 'active' ? 'norm-active' : 'norm-upcoming';
+            div.innerHTML = `<strong>${norm.name}</strong>`;
+            normsListDiv.appendChild(div);
+        });
+
+        // 4. Simulazione Calcolo Matrice Strategica
+        // Rilevanza: da 1 (già in compliance) a 10 (nessuna misura presa)
+        // Urgenza: da 1 (scadenza lontana) a 10 (già in vigore o imminente)
+        
+        let q1Val = document.getElementById('q1').value;
+        let q1Sub = document.getElementById('q1_sub').value;
+        
+        // Esempio Logica CSRD
+        let csrdRelevance = (q1Val === 'SI' && q1Sub === 'ESRS') ? 2 : 9;
+        let csrdUrgency = 9; // Già attiva/in rollout
+
+        // Esempio Logica CSDDD (Catena di fornitura)
+        let q3Val = document.getElementById('q3').value;
+        let csdddRelevance = (q3Val === 'SI') ? 4 : 8;
+        let csdddUrgency = 6; // Implementazione progressiva
+
+        const matrixData = [
+            { x: csrdUrgency, y: csrdRelevance, label: 'CSRD/Omnibus', bgColor: '#0056b3' },
+            { x: csdddUrgency, y: csdddRelevance, label: 'CSDDD', bgColor: '#ffc107' },
+            { x: 8, y: 7, label: 'EUDR (Deforestazione)', bgColor: '#28a745' },
+            { x: 5, y: 9, label: 'PPWR (Imballaggi)', bgColor: '#17a2b8' },
+            { x: 9, y: 5, label: 'Green Claims', bgColor: '#dc3545' }
+        ];
+
+        // Disegna Matrice
+        const ctx = document.getElementById('strategicMatrix').getContext('2d');
+        new Chart(ctx, {
+            type: 'scatter',
+            data: {
+                datasets: [{
+                    label: 'Normative',
+                    data: matrixData,
+                    backgroundColor: matrixData.map(d => d.bgColor),
+                    pointRadius: 8,
+                    pointHoverRadius: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let point = matrixData[context.dataIndex];
+                                return point.label + ' (Urgenza: ' + point.x + ', Rilevanza/Gap: ' + point.y + ')';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: { title: { display: true, text: 'Urgenza (Scadenza imminente)' }, min: 0, max: 10 },
+                    y: { title: { display: true, text: 'Rilevanza (Gap di Compliance)' }, min: 0, max: 10 }
+                }
+            }
+        });
+
+        // Popola Lista Priorità (Quadrante Alto a Destra)
+        const actionList = document.getElementById('actionList');
+        actionList.innerHTML = '';
+        matrixData.filter(d => d.x >= 5 && d.y >= 5).forEach(d => {
+            let li = document.createElement('li');
+            li.innerHTML = `<strong>${d.label}:</strong> Elevata urgenza e gap significativo. Richiede intervento immediato.`;
+            actionList.appendChild(li);
+        });
+
+        // Mostra Report, Nascondi Input
+        document.getElementById('inputSection').style.display = 'none';
+        document.getElementById('reportSection').style.display = 'block';
+    }
+
+    function exportPDF() {
+        const element = document.getElementById('printableReport');
+        const opt = {
+            margin:       0.5,
+            filename:     'SustainLEX_Report.pdf',
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2 },
+            jsPDF:        { unit: 'in', format: 'a4', orientation: 'landscape' },
+            pagebreak:    { mode: 'css', before: '.page-break' }
+        };
+
+        html2pdf().set(opt).from(element).save();
+    }
+</script>
+
+</body>
+</html>
