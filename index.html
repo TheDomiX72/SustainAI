@@ -14,13 +14,6 @@
             --tecno-blue: #002b49; --tecno-light: #00a0d2; --bg-main: #f8fafc; --text-main: #1e293b;
             --text-muted: #64748b; --border-color: #e2e8f0;
             
-            /* Colori Categorie */
-            --cat-supply: #10b981; --cat-supply-bg: #d1fae5;
-            --cat-prod: #f59e0b; --cat-prod-bg: #fef3c7;
-            --cat-report: #3b82f6; --cat-report-bg: #dbeafe;
-            --cat-dd: #8b5cf6; --cat-dd-bg: #ede9fe;
-            --cat-soc: #6366f1; --cat-soc-bg: #e0e7ff;
-            
             /* Status */
             --status-alta: #ef4444; --status-alta-bg: #fee2e2;
             --status-media: #f59e0b; --status-media-bg: #fef3c7;
@@ -52,12 +45,12 @@
         
         /* REPORT STYLES */
         #reportSection { display: none; width: 100%; box-sizing: border-box; }
-        #printableReport { background: white; width: 100%; box-sizing: border-box; max-width: 100%; }
+        #printableReport { background: white; width: 100%; box-sizing: border-box; max-width: 100%; position: relative; }
         
         .avoid-break { page-break-inside: avoid; break-inside: avoid; clear: both;}
         .page-break { page-break-before: always; clear: both; padding-top: 20px; margin-top: 20px; }
 
-        /* Ambiti - Gestione responsive barre */
+        /* Ambiti */
         .ambiti-flex-container { display: flex; flex-wrap: wrap; gap: 20px; width: 100%; box-sizing: border-box; }
         .ambito-card { flex: 1; min-width: calc(50% - 10px); box-sizing: border-box; margin-bottom: 10px; page-break-inside: avoid; break-inside: avoid;}
         .ambito-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-weight: 600; }
@@ -112,18 +105,17 @@
         .db-content p { margin: 0; font-size: 12px; color: var(--text-muted); line-height: 1.5;}
         .db-badge { font-size: 10px; padding: 1px 6px; border-radius: 3px; font-weight: 600; white-space: nowrap;}
         
-        .chart-container { position: relative; height: 450px; width: 100%; margin-top: 20px; background: white; border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; box-sizing: border-box; max-width: 100%;}
+        .chart-container { position: relative; height: 480px; width: 100%; margin-top: 20px; background: white; border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; box-sizing: border-box; max-width: 100%;}
+        
+        /* Nota Legale */
+        .legal-disclaimer { margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border-color); font-size: 10px; color: var(--text-muted); text-align: justify; line-height: 1.5; }
 
-        /* MEDIA QUERIES PER PDF - Forzano il layout A4 orizzontale durante la stampa */
+        /* PDF FIXES */
         @media print {
             body { padding: 0; background: white; }
             .header-logo, .container, #reportSection { box-shadow: none; border-radius: 0; width: 297mm; max-width: 297mm; margin: 0 auto; padding: 10mm; }
-            
-            /* Forza l'apertura di tutti gli accordion durante la stampa */
             .obbligo-details { display: block !important; }
             .chevron { display: none !important; }
-            
-            /* Gestione Ambito a 2 colonne in PDF */
             .ambiti-flex-container { display: flex; flex-direction: row; flex-wrap: wrap; }
             .ambito-card { min-width: calc(50% - 15px); max-width: calc(50% - 15px); flex: 1; }
         }
@@ -166,25 +158,205 @@
 
         <div class="section">
             <h2>2. Questionario Operativo</h2>
-            <div class="form-group"><label>1. L'azienda redige un report di sostenibilità?</label><select id="q1" onchange="toggleConditional('q1', 'q1_sub', 'SI')"><option value="NO">No</option><option value="SI">Sì</option></select><select id="q1_sub" class="conditional-select"><option value="">Seleziona...</option><option value="GRI">Report GRI</option><option value="ESRS">Report ESRS</option><option value="Altro">Altro (VSME)</option></select></div>
-            <div class="form-group"><label>2. Tra i clienti dell'azienda ci sono grandi aziende o multinazionali?</label><select id="q2" onchange="toggleConditional('q2', 'q2_sub', 'SI')"><option value="NO">No</option><option value="SI">Sì</option></select><select id="q2_sub" class="conditional-select"><option value="">Seleziona...</option><option value="Collab">Collabora ai processi di due diligence</option><option value="Dati">Fornisce dati in materia di sostenibilità</option><option value="Nessuna">I clienti non richiedono dati</option></select></div>
-            <div class="form-group"><label>3. L'azienda verifica l'assenza di lavoro forzato/minorile lungo la filiera?</label><select id="q3" onchange="toggleConditional('q3', 'q3_sub', 'SI')"><option value="NO">No</option><option value="SI">Sì</option></select><select id="q3_sub" class="conditional-select"><option value="">Seleziona...</option><option value="Strutturato">Ha strutturato un sistema di due diligence</option><option value="Richiesta">Richiede ai fornitori informazioni</option><option value="Nessuna">Nessuna delle precedenti</option></select></div>
-            <div class="form-group"><label>4. L'azienda commercializza prodotti da bovini, cacao, caffè, palma, gomma, soia o legno?</label><select id="q4" onchange="toggleConditional('q4', 'q4_sub', 'SI')"><option value="NO">No</option><option value="SI">Sì</option></select><select id="q4_sub" class="conditional-select"><option value="">Seleziona...</option><option value="DD_Attiva">Effettua due diligence (deforestazione)</option><option value="DD_Inizio">Ha iniziato a impostare un sistema</option><option value="Conosce">Conosce le norme ma nessuna iniziativa</option><option value="Nessuna">Nessuna delle precedenti</option></select></div>
-            <div class="form-group"><label>5. L'azienda importa/esporta tali prodotti (bovini, cacao, ecc.)?</label><select id="q5" onchange="toggleConditional('q5', 'q5_sub', 'SI')"><option value="NO">No</option><option value="SI">Sì</option></select><select id="q5_sub" class="conditional-select"><option value="">Seleziona...</option><option value="DD_Attiva">Effettua due diligence (deforestazione)</option><option value="DD_Inizio">Ha iniziato a impostare un sistema</option><option value="Conosce">Conosce le norme ma nessuna iniziativa</option><option value="Nessuna">Nessuna delle precedenti</option></select></div>
-            <div class="form-group"><label>6. L'azienda importa in UE stagno, tantalio, tungsteno, minerali, oro, da zone di conflitto?</label><select id="q6" onchange="toggleConditional('q6', 'q6_sub', 'SI')"><option value="NO">No</option><option value="SI">Sì</option></select><select id="q6_sub" class="conditional-select"><option value="">Seleziona...</option><option value="Strutturato">Ha strutturato un sistema di due diligence</option><option value="Richiesta">Richiede ai fornitori informazioni</option><option value="Nessuna">Nessuna delle precedenti</option></select></div>
-            <div class="form-group"><label>7. L'azienda importa extraUE: cemento, fertilizzanti, ferro/acciaio, alluminio, idrogeno?</label><select id="q7" onchange="toggleConditional('q7', 'q7_sub', 'SI')"><option value="NO">No</option><option value="SI">Sì</option></select><select id="q7_sub" class="conditional-select"><option value="">Seleziona...</option><option value="Dichiarazione">Presenta dichiarazione e acquista certificati</option><option value="Monitora">Monitora e rende conto dei dati</option><option value="Conosce">Conosce ma non ha processo di gestione</option><option value="Nessuna">Nessuna delle precedenti</option></select></div>
-            <div class="form-group"><label>8. L'azienda immette sul mercato veicoli (agricoli, 2/3 ruote, cat. M, N, O)?</label><select id="q8" onchange="toggleConditional('q8', 'q8_sub', 'SI')"><option value="NO">No</option><option value="SI">Sì</option></select><select id="q8_sub" class="conditional-select"><option value="">Seleziona...</option><option value="Esclusivo">ESCLUSIVAMENTE veicoli in questo elenco</option><option value="Anche_Altri">Anche veicoli NON presenti in questo elenco</option></select></div>
-            <div class="form-group"><label>9. L'azienda applica principi di ecoprogettazione?</label><select id="q9"><option value="NO">No</option><option value="SI">Sì</option></select></div>
-            <div class="form-group"><label>10. L'azienda immette sul mercato lavatrici, display, server, telefoni, ecc.?</label><select id="q10"><option value="NO">No</option><option value="SI">Sì</option></select></div>
-            <div class="form-group"><label>11. L'azienda produce, importa o immette sul mercato prodotti contenenti microplastiche?</label><select id="q11" onchange="toggleConditional('q11', 'q11_sub', 'SI')"><option value="NO">No</option><option value="SI">Sì</option></select><select id="q11_sub" class="conditional-select"><option value="">Seleziona...</option><option value="Regolari">Studi regolari sul tema</option><option value="Sporadici">Studi sporadici</option><option value="Legge">Limita applicazione a requisiti di legge</option><option value="Nessuna">Nessuna delle precedenti</option></select></div>
-            <div class="form-group"><label>12. L'azienda produce, importa, distribuisce o utilizza imballaggi?</label><select id="q12" onchange="toggleConditional('q12', 'q12_sub', 'SI')"><option value="NO">No</option><option value="SI">Sì</option></select><select id="q12_sub" class="conditional-select"><option value="">Seleziona...</option><option value="Implementa">Conosce normative e ha iniziato a implementare</option><option value="Conosce">Conosce normative ma non ha implementato</option><option value="Nessuna">Poche o nessuna informazione</option></select></div>
-            <div class="form-group"><label>13. L'azienda utilizza pratiche di marketing sull'impatto ambientale (Green Claims)?</label><select id="q13" onchange="toggleConditional('q13', 'q13_sub', 'SI')"><option value="NO">No</option><option value="SI">Sì</option></select><select id="q13_sub" class="conditional-select"><option value="">Seleziona...</option><option value="Misure">Conosce norme/rischi e ha adottato misure</option><option value="No_Misure">Conosce norme/rischi ma no misure specifiche</option><option value="Rischi">Conosce i rischi generali sul greenwashing</option><option value="Non_Conosce">Non conosce le norme sui green claims</option></select></div>
-            <div class="form-group"><label>14. L'azienda immette sul mercato prodotti che prevedono l'uso di batterie?</label><select id="q14" onchange="toggleConditional('q14', 'q14_sub', 'SI')"><option value="NO">No</option><option value="SI">Sì</option></select><select id="q14_sub" class="conditional-select"><option value="">Seleziona...</option><option value="Implementate">A conoscenza obblighi e ha implementato</option><option value="Conosce">A conoscenza dei requisiti e obblighi</option><option value="Non_Conosce">NON a conoscenza dei requisiti/obblighi</option></select></div>
-            <div class="form-group"><label>15. L'azienda acquista materie prime definite dall'UE come critiche o strategiche?</label><select id="q15" onchange="toggleConditional('q15', 'q15_sub', 'SI')"><option value="NO">No</option><option value="SI">Sì</option></select><select id="q15_sub" class="conditional-select"><option value="">Seleziona...</option><option value="Solo_Riciclate">Acquista solo MPC riciclate</option><option value="Alcune">Alcune MPC acquistate sono riciclate</option><option value="Vergini">Acquista solo MPC vergini</option></select></div>
-            <div class="form-group"><label>16. L'azienda applica i principi della trasparenza e parità retributiva?</label><select id="q16" onchange="toggleConditional('q16', 'q16_sub', 'SI')"><option value="NO">No</option><option value="SI">Sì</option></select><select id="q16_sub" class="conditional-select"><option value="">Seleziona...</option><option value="Certificazione">Ha implementato sistemi di gestione/certificazione</option><option value="Monitora">Monitora il tema ma non ha sistemi/certificazioni</option><option value="Nessuna">Nessuna delle precedenti</option></select></div>
-            <div class="form-group"><label>17. L'azienda mette in atto iniziative di responsabilità d'impresa in ambito sociale?</label><select id="q17" onchange="toggleConditional('q17', 'q17_sub', 'SI')"><option value="NO">No</option><option value="SI">Sì</option></select><select id="q17_sub" class="conditional-select"><option value="">Seleziona...</option><option value="Certificazione">Ha implementato sistemi/certificazioni</option><option value="Monitora">Monitora il tema, ma non ha sistemi/certificazioni</option><option value="Nessuna">Nessuna delle precedenti</option></select></div>
-            <div class="form-group"><label>18. L'azienda mette in atto iniziative di responsabilità in ambito ambientale?</label><select id="q18" onchange="toggleConditional('q18', 'q18_sub', 'SI')"><option value="NO">No</option><option value="SI">Sì</option></select><select id="q18_sub" class="conditional-select"><option value="">Seleziona...</option><option value="Certificazione">Ha implementato sistemi/certificazioni</option><option value="Monitora">Monitora il tema, ma non ha sistemi/certificazioni</option><option value="Nessuna">Nessuna delle precedenti</option></select></div>
-            <div class="form-group"><label>19. L'azienda mette in atto iniziative di responsabilità d'impresa in ambito salute/sicurezza?</label><select id="q19" onchange="toggleConditional('q19', 'q19_sub', 'SI')"><option value="NO">No</option><option value="SI">Sì</option></select><select id="q19_sub" class="conditional-select"><option value="">Seleziona...</option><option value="Certificazione">Ha implementato sistemi/certificazioni</option><option value="Monitora">Monitora il tema, ma non ha sistemi/certificazioni</option><option value="Nessuna">Nessuna delle precedenti</option></select></div>
+            
+            <div class="form-group">
+                <label>1. L'azienda redige un report di sostenibilità?</label>
+                <select id="q1" onchange="toggleConditional('q1', 'q1_sub', 'SI')"><option value="NO">No</option><option value="SI">Sì</option></select>
+                <select id="q1_sub" class="conditional-select">
+                    <option value="">Seleziona...</option>
+                    <option value="GRI">Report di sostenibilità GRI?</option>
+                    <option value="ESRS">Report di sostenibilità ESRS?</option>
+                    <option value="Altro">Altro tipo di Report di sostenibilità (es: VSME).</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>2. Tra i clienti dell'azienda ci sono grandi aziende o multinazionali?</label>
+                <select id="q2" onchange="toggleConditional('q2', 'q2_sub', 'SI')"><option value="NO">No</option><option value="SI">Sì</option></select>
+                <select id="q2_sub" class="conditional-select">
+                    <option value="">Seleziona...</option>
+                    <option value="Collab">L'azienda collabora pienamente ai processi di due diligence ambientale e sociale di tali clienti</option>
+                    <option value="Dati">L'azienda fornisce a tali clienti molti e diversi dati in materia di sostenibilità ambientale e sociale</option>
+                    <option value="Nessuna">I clienti non richiedono dati al momento.</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>3. L'azienda verifica periodicamente i propri processi per garantire l'assenza di lavoro forzato e o minorile lungo tutta la filiera?</label>
+                <select id="q3" onchange="toggleConditional('q3', 'q3_sub', 'SI')"><option value="NO">No</option><option value="SI">Sì</option></select>
+                <select id="q3_sub" class="conditional-select">
+                    <option value="">Seleziona...</option>
+                    <option value="Strutturato">L'azienda ha strutturato un sistema di due diligence per verificare questi aspetti</option>
+                    <option value="Richiesta">L'azienda richiede ai propri fornitori alcune informazioni per verificare questi aspetti</option>
+                    <option value="Nessuna">nessuna delle precedenti.</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>4. L'azienda commercializza prodotti derivanti da bovini, cacao, caffè, olio di palma, gomma, soia o legno?</label>
+                <select id="q4" onchange="toggleConditional('q4', 'q4_sub', 'SI')"><option value="NO">No</option><option value="SI">Sì</option></select>
+                <select id="q4_sub" class="conditional-select">
+                    <option value="">Seleziona...</option>
+                    <option value="DD_Attiva">L'azienda effetta una due diligence delle proprie attività con focus su deforestazione e degrado forestale</option>
+                    <option value="DD_Inizio">L'azienda ha iniziato a impostare un sistema di due diligence sulla deforestazione e il degrado forestale</option>
+                    <option value="Conosce">L'azienda conosce le norme sulla deforestazione ma non ha ancora attivato nessuna iniziativa a riguardo</option>
+                    <option value="Nessuna">Nessuna delle precedenti.</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>5. L'azienda importa e o esporta prodotti derivanti da bovini, cacao, caffè, olio di palma, gomma, soia e legno?</label>
+                <select id="q5" onchange="toggleConditional('q5', 'q5_sub', 'SI')"><option value="NO">No</option><option value="SI">Sì</option></select>
+                <select id="q5_sub" class="conditional-select">
+                    <option value="">Seleziona...</option>
+                    <option value="DD_Attiva">L'azienda effetta una due diligence delle proprie attività su deforestazione e degrado forestale</option>
+                    <option value="DD_Inizio">L'azienda ha iniziato a impostare un sistema di due diligence sulla deforestazione e il degrado forestale</option>
+                    <option value="Conosce">L'azienda conosce le norme sulla deforestazione ma non ha ancora attivato nessuna iniziativa a riguardo</option>
+                    <option value="Nessuna">Nessuna delle precedenti.</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>6. L'azienda importa in UE almeno uno dei seguenti beni? Stagno, tantalio, tungsteno, minerali, oro, originari di zone di conflitto o ad alto rischio?</label>
+                <select id="q6" onchange="toggleConditional('q6', 'q6_sub', 'SI')"><option value="NO">No</option><option value="SI">Sì</option></select>
+                <select id="q6_sub" class="conditional-select">
+                    <option value="">Seleziona...</option>
+                    <option value="Strutturato">L'azienda ha strutturato un sistema di due diligence per verificare questi aspetti</option>
+                    <option value="Richiesta">L'azienda richiede ai propri fornitori alcune informazioni per verificare questi aspetti</option>
+                    <option value="Nessuna">Nessuna delle precedenti.</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>7. L'azienda importa da Paesi extraUE: cemento, fertilizzanti, ferro e acciaio, alluminio, elettricità, idrogeno?</label>
+                <select id="q7" onchange="toggleConditional('q7', 'q7_sub', 'SI')"><option value="NO">No</option><option value="SI">Sì</option></select>
+                <select id="q7_sub" class="conditional-select">
+                    <option value="">Seleziona...</option>
+                    <option value="Dichiarazione">L'azienda presenta una dichiarazione attuale sulle proprie emissioni relative a questi prodotti e acquista certificati per compensare le emissioni stesse</option>
+                    <option value="Monitora">L'azienda monitora e rende conto ai propri dati sulle emissioni relativi ai prodotti che acquista</option>
+                    <option value="Conosce">L'azienda conosce gli adempimenti ma non ha ancora formalizzato né implementato un processo di gestione</option>
+                    <option value="Nessuna">Nessuna delle precedenti.</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>8. L'azienda immette sul mercato veicoli che rientrano tra le seguenti categorie agricoli e forestali, veicoli a due o tre ruote e quadricicli, veicoli a motore delle categorie M, N e rimorchi della categoria O?</label>
+                <select id="q8" onchange="toggleConditional('q8', 'q8_sub', 'SI')"><option value="NO">No</option><option value="SI">Sì</option></select>
+                <select id="q8_sub" class="conditional-select">
+                    <option value="">Seleziona...</option>
+                    <option value="Esclusivo">L'azienda immette nel mercato ESCLUSIVAMENTE veicoli presenti in questo elenco</option>
+                    <option value="Anche_Altri">L'azienda immette sul mercato anche veicoli NON presenti in questo elenco.</option>
+                </select>
+            </div>
+
+            <div class="form-group"><label>9. L'azienda applica principi di ecoprogettazione?</label>
+                <select id="q9"><option value="NO">No</option><option value="SI">Sì</option></select>
+            </div>
+
+            <div class="form-group"><label>10. L'azienda immette sul mercato almeno uno dei seguenti beni? Lavatrici, asciugatrici, lavasciuga biancheria per uso domestico, lavastoviglie, apparecchi di refrigerazione, display elettronici, apparecchiature di saldatura, aspirapolveri, server e prodotti di archiviazione dati, telefoni cellulari, cordless, tablet, beni che incorporano batterie per mezzi di trasporto leggeri.</label>
+                <select id="q10"><option value="NO">No</option><option value="SI">Sì</option></select>
+            </div>
+
+            <div class="form-group">
+                <label>11. L'azienda produce, importa o immette sul mercato dell'UE prodotti contenenti microplastiche?</label>
+                <select id="q11" onchange="toggleConditional('q11', 'q11_sub', 'SI')"><option value="NO">No</option><option value="SI">Sì</option></select>
+                <select id="q11_sub" class="conditional-select">
+                    <option value="">Seleziona...</option>
+                    <option value="Regolari">L'azienda conduce regolarmente studi per monitorare il tema microplastiche</option>
+                    <option value="Sporadici">L'azienda ha condotto in modo sporadico studi per monitorare il tema microplastiche</option>
+                    <option value="Legge">L'azienda si limita ad applicare i requisiti di legge sul tema microplastiche</option>
+                    <option value="Nessuna">Nessuna delle precedenti.</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>12. L'azienda produce, importa, distribuisce o utilizza imballaggi?</label>
+                <select id="q12" onchange="toggleConditional('q12', 'q12_sub', 'SI')"><option value="NO">No</option><option value="SI">Sì</option></select>
+                <select id="q12_sub" class="conditional-select">
+                    <option value="">Seleziona...</option>
+                    <option value="Implementa">L'azienda conosce le nuove normative europee sugli imballaggi e ha già iniziato a implementare alcuni requisiti richiesti</option>
+                    <option value="Conosce">L'azienda conosce le nuove normative europee sugli imballaggi ma non ha implementato alcun tipo di attività di gestione normativa</option>
+                    <option value="Nessuna">L'azienda ha poche o nessuna informazione in merito alla normativa europea sugli imballaggi.</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>13. L'azienda utilizza pratiche di marketing riferite ad aspetti di performance, di impatto ambientale dei propri prodotti o servizi?</label>
+                <select id="q13" onchange="toggleConditional('q13', 'q13_sub', 'SI')"><option value="NO">No</option><option value="SI">Sì</option></select>
+                <select id="q13_sub" class="conditional-select">
+                    <option value="">Seleziona...</option>
+                    <option value="Misure">L'azienda conosce le norme sui green claims e i rischi del greenwashing e ha già adottato tutte le misure per evitare di incorrere in sanzioni</option>
+                    <option value="No_Misure">L'azienda conosce le norme sui green claims e i rischi del greenwashing ma non si è ancora dotata di misure gestionali specifiche in materia</option>
+                    <option value="Rischi">L'azienda conosce i rischi generali sul greenwashing</option>
+                    <option value="Non_Conosce">L'azienda non conosce le norme né sui green claims né i rischi legati al greenwashing.</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>14. L'azienda immette sul mercato prodotti che includono o prevedono l'uso di batterie?</label>
+                <select id="q14" onchange="toggleConditional('q14', 'q14_sub', 'SI')"><option value="NO">No</option><option value="SI">Sì</option></select>
+                <select id="q14_sub" class="conditional-select">
+                    <option value="">Seleziona...</option>
+                    <option value="Implementate">L'azienda è a conoscenza dei requisiti e degli obblighi previsti dal regolamento UE sulle batterie e ha già implementato tutte le richieste</option>
+                    <option value="Conosce">L'azienda è a conoscenza dei requisiti e degli oblighi previsti dal regolamento UE sulle batterie</option>
+                    <option value="Non_Conosce">L'azienda NON è a conoscenza dei requisiti e degli obblighi previsti dal regolamento UE sulle batterie.</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>15. L'azienda acquista almeno una delle materie prime definite dall'UE come critiche o strategiche?</label>
+                <select id="q15" onchange="toggleConditional('q15', 'q15_sub', 'SI')"><option value="NO">No</option><option value="SI">Sì</option></select>
+                <select id="q15_sub" class="conditional-select">
+                    <option value="">Seleziona...</option>
+                    <option value="Solo_Riciclate">L'azienda acquista solo MPC riciclate</option>
+                    <option value="Alcune">Alcune MPC che l'azienda acquista sono riciclate</option>
+                    <option value="Vergini">L'azienda acquista solo MPC vergini.</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>16. L'azienda applica i principi della trasparenza retributiva e della parità di retribuzione tra uomini e donne per uno stesso lavoro o per un lavoro di pari valore?</label>
+                <select id="q16" onchange="toggleConditional('q16', 'q16_sub', 'SI')"><option value="NO">No</option><option value="SI">Sì</option></select>
+                <select id="q16_sub" class="conditional-select">
+                    <option value="">Seleziona...</option>
+                    <option value="Certificazione">L'azienda ha implementato sistemi di gestione e certificazione sul tema</option>
+                    <option value="Monitora">L'azienda monitora il tema ma non ha sistemi di gestione o certificazioni</option>
+                    <option value="Nessuna">Nessuna delle precedenti.</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>17. L'azienda mette in atto iniziative di responsabilità d'impresa in ambito sociale?</label>
+                <select id="q17" onchange="toggleConditional('q17', 'q17_sub', 'SI')"><option value="NO">No</option><option value="SI">Sì</option></select>
+                <select id="q17_sub" class="conditional-select">
+                    <option value="">Seleziona...</option>
+                    <option value="Certificazione">L'azienda ha implementato sistemi di gestione e certificazioni</option>
+                    <option value="Monitora">L'azienda monitora il tema, ma non ha sistemi di gestione o certificazioni</option>
+                    <option value="Nessuna">Nessuna delle precedenti.</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>18. L'azienda mette in atto iniziative di responsabilità in ambito ambientale?</label>
+                <select id="q18" onchange="toggleConditional('q18', 'q18_sub', 'SI')"><option value="NO">No</option><option value="SI">Sì</option></select>
+                <select id="q18_sub" class="conditional-select">
+                    <option value="">Seleziona...</option>
+                    <option value="Certificazione">L'azienda ha implementato sistemi di gestione e certificazioni</option>
+                    <option value="Monitora">L'azienda monitora il tema, ma non ha sistemi di gestione o certificazioni</option>
+                    <option value="Nessuna">Nessuna delle precedenti.</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>19. L'azienda mette in atto iniziative di responsabilità d'impresa in ambito salute e sicurezza?</label>
+                <select id="q19" onchange="toggleConditional('q19', 'q19_sub', 'SI')"><option value="NO">No</option><option value="SI">Sì</option></select>
+                <select id="q19_sub" class="conditional-select">
+                    <option value="">Seleziona...</option>
+                    <option value="Certificazione">L'azienda ha implementato sistemi di gestione e certificazioni</option>
+                    <option value="Monitora">L'azienda monitora il tema, ma non ha sistemi di gestione o certificazioni</option>
+                    <option value="Nessuna">Nessuna delle precedenti.</option>
+                </select>
+            </div>
 
             <button onclick="generateReport()">Elabora Report Strategico Avanzato</button>
         </div>
@@ -212,8 +384,7 @@
                     <img id="pdfLogo2" src="Tecno ESG.png" alt="Tecno Group" style="height: 30px;">
                 </div>
                 <h2>Obblighi Normativi Applicabili</h2>
-                <p>Normative ordinate per impatto complessivo (urgenza × rilevanza). <strong>Clicca sulle singole voci per visualizzare i dettagli e le scadenze normative.</strong></p>
-                
+                <p>Normative ordinate per impatto complessivo (urgenza × rilevanza). <strong>Clicca sulle singole voci per visualizzare i dettagli.</strong></p>
                 <div id="obblighiContainer" style="margin-top: 20px;"></div>
             </div>
 
@@ -222,7 +393,7 @@
                     <img id="pdfLogo3" src="Tecno ESG.png" alt="Tecno Group" style="height: 30px;">
                 </div>
                 <h2>Matrice di Indirizzo Strategico</h2>
-                <p>Visualizzazione grafica delle normative pertinenti basata sull'urgenza temporale e il gap di compliance interno.</p>
+                <p>Visualizzazione grafica delle normative basata sull'urgenza temporale e il gap di compliance interno.</p>
                 <div class="chart-container">
                     <canvas id="strategicMatrix"></canvas>
                 </div>
@@ -240,6 +411,10 @@
                     </div>
                 </div>
                 <div id="databaseContainer"></div>
+                
+                <div class="legal-disclaimer">
+                    <strong>Nota legale:</strong> Il report si basa su "Self Assessment" e sull'aggiornamento costante delle normative. Esso è quindi soggetto ad errori in caso di mancata indicazione di temi cogenti, e a risultati diversi a seconda del mese e anno di compilazione. Tecno Group non può essere, in nessun caso, considerata responsabile per indicazioni errate di gestione.
+                </div>
             </div>
         </div>
         
@@ -261,14 +436,10 @@
         if (parent.value !== triggerValue) sub.value = ''; 
     }
 
-    // Toggle Accordion per UI
     function toggleAccordion(element) {
         const card = element.parentElement;
         const details = card.querySelector('.obbligo-details');
         
-        // Chiude eventuali altri aperti se necessario (opzionale)
-        // document.querySelectorAll('.obbligo-card.open').forEach(c => { if(c !== card) { c.classList.remove('open'); c.querySelector('.obbligo-details').style.display = 'none'; } });
-
         if (card.classList.contains('open')) {
             card.classList.remove('open');
             details.style.display = 'none';
@@ -278,87 +449,33 @@
         }
     }
 
-    // Database Completo
     const databaseNorme = [
-        { id: 'csrd', cat: 'Reporting', num: 'Dir. UE 2022/2464 mod. 2026/470', name: 'Corporate Sustainability Reporting Directive (CSRD)', 
-          desc: 'Obbliga le aziende a pubblicare report dettagliati sul proprio impatto ambientale e sociale, seguendo gli standard ESRS.', 
-          scadenze: [{d:'1 Gennaio 2024', t:'Applicazione per enti di interesse pubblico >500 dip.'}, {d:'1 Gennaio 2025', t:'Applicazione per grandi imprese (non quotate)'}, {d:'18 Marzo 2026', t:'Omnibus I: semplificazioni e nuove soglie'}], status: 'Vigente', urg: 9 },
-        
-        { id: 'eudr', cat: 'Supply Chain', num: 'Regolamento UE 2023/1115', name: 'EU Deforestation Regulation (EUDR)', 
-          desc: 'Vieta l\'immissione sul mercato UE di prodotti associati a deforestazione lungo la filiera (carne, cacao, caffè, palma, gomma, soia, legno).', 
-          scadenze: [{d:'30 Dicembre 2025', t:'Applicazione per grandi operatori'}, {d:'30 Giugno 2026', t:'Applicazione per PMI'}], status: 'Vigente', urg: 8 },
-        
-        { id: 'eudrmod', cat: 'Supply Chain', num: 'Direttiva UE 2024/1799', name: 'Modifica EUDR — Disposizioni complementari', 
-          desc: 'Apporta modifiche complementari e chiarimenti sulle disposizioni della normativa EUDR originaria.', 
-          scadenze: [{d:'30 Dicembre 2025', t:'Applicazione contestuale al Regolamento principale'}], status: 'Vigente', urg: 8 },
-        
-        { id: 'micro', cat: 'Prodotto', num: 'Regolamento UE 2023/2055', name: 'Restrizione Microplastiche (REACH)', 
-          desc: 'Vieta la vendita di microplastiche aggiunte intenzionalmente in cosmetici, detergenti, materiali granulari, ecc.', 
-          scadenze: [{d:'17 Ottobre 2023', t:'Entrata in vigore glitter e microsfere in risciacquo'}, {d:'17 Ottobre 2027-2029', t:'Applicazione progressiva per altri cosmetici e detergenti'}], status: 'Vigente', urg: 9 },
-        
-        { id: 'cbam', cat: 'Supply Chain', num: 'Regolamento UE 2023/956', name: 'Carbon Border Adjustment Mechanism (CBAM)', 
-          desc: 'Tassa sul carbonio alle frontiere UE per prevenire la rilocalizzazione delle emissioni per cemento, acciaio, alluminio, idrogeno, ecc.', 
-          scadenze: [{d:'1 Ottobre 2023', t:'Inizio fase transitoria (reporting trimestrale)'}, {d:'1 Gennaio 2026', t:'Fase definitiva: obbligo acquisto certificati CBAM'}], status: 'Vigente', urg: 10 },
-        
-        { id: 'eco_en', cat: 'Prodotto', num: 'Regolamento UE 2024/301', name: 'Ecodesign ed Etichettatura Energetica', 
-          desc: 'Aggiornamento dei requisiti di progettazione ecocompatibile e dell\'etichettatura energetica per i prodotti connessi all\'energia.', 
-          scadenze: [{d:'Giugno 2025', t:'Applicazione primi requisiti specifici di settore'}], status: 'Vigente', urg: 8 },
-        
-        { id: 'batteries', cat: 'Prodotto', num: 'Regolamento UE 2023/1542', name: 'Regolamento Batterie', 
-          desc: 'Gestisce l\'intero ciclo di vita delle batterie (progettazione, uso, riciclo), introducendo la due diligence e il Passaporto Digitale.', 
-          scadenze: [{d:'18 Febbraio 2024', t:'Entrata in vigore generale'}, {d:'18 Febbraio 2025', t:'Obblighi due diligence materie prime critiche'}], status: 'Vigente', urg: 9 },
-        
-        { id: 'conflict', cat: 'Supply Chain', num: 'Regolamento UE 2017/821', name: 'Regolamento Minerali di Conflitto', 
-          desc: 'Doveri di due diligence per importatori di stagno, tantalio, tungsteno e oro provenienti da zone di conflitto o ad alto rischio.', 
-          scadenze: [{d:'1 Gennaio 2021', t:'Piena applicazione'}], status: 'Vigente', urg: 10 },
-        
-        { id: 'com2011', cat: 'Sociale', num: 'COM 2011/681', name: 'Comunicazione RSI — Responsabilità Sociale d\'Impresa', 
-          desc: 'Quadro strategico dell\'UE per promuovere la responsabilità sociale e le pratiche commerciali responsabili.', 
-          scadenze: [{d:'2011', t:'Pubblicazione strategia (Applicazione continua)'}], status: 'Vigente', urg: 5 },
-        
-        { id: 'csddd', cat: 'Due Diligence', num: 'Dir. UE 2024/1760 mod. 2026/470', name: 'Corporate Sustainability Due Diligence (CSDDD)', 
-          desc: 'Obbligo di individuare, prevenire, mitigare e rendicontare gli impatti negativi su diritti umani e ambiente lungo la catena del valore.', 
-          scadenze: [{d:'26 Luglio 2026', t:'Omnibus I: deadline recepimento Stati Membri'}, {d:'2027/2028', t:'Inizio scaglionato obblighi rendicontazione e audit'}], status: 'In attivazione', urg: 7 },
-        
-        { id: 'espr', cat: 'Prodotto', num: 'Regolamento UE 2024/1781', name: 'Ecodesign for Sustainable Products Regulation (ESPR)', 
-          desc: 'Quadro per requisiti di progettazione ecocompatibile (durata, riparabilità, riciclo) per quasi tutti i prodotti fisici, Passaporto Digitale.', 
-          scadenze: [{d:'18 Luglio 2024', t:'Entrata in vigore'}, {d:'2025 - 2027', t:'Adozione atti delegati e applicazione prime categorie merceologiche'}], status: 'In attivazione', urg: 7 },
-        
-        { id: 'ppwr', cat: 'Prodotto', num: 'Regolamento UE 2025/40', name: 'Regolamento Imballaggi e Rifiuti di Imballaggio (PPWR)', 
-          desc: 'Nuovi requisiti su riciclabilità obbligatoria, contenuto riciclato minimo, obiettivi di riduzione e riutilizzo degli imballaggi.', 
-          scadenze: [{d:'12 Agosto 2025', t:'Entrata in vigore'}, {d:'1 Gennaio 2030', t:'Obiettivi riciclabilità e contenuto riciclato'}], status: 'In attivazione', urg: 6 },
-        
-        { id: 'greenclaims', cat: 'Prodotto', num: 'Direttiva UE 2024/825', name: 'Direttiva Green Claims / Empowering Consumers', 
-          desc: 'Protegge i consumatori dal greenwashing vietando dichiarazioni ambientali generiche, non comprovate o basate sulla compensazione delle emissioni.', 
-          scadenze: [{d:'27 Marzo 2026', t:'Termine recepimento nazionale'}, {d:'27 Settembre 2027', t:'Applicazione completa e inizio sanzioni'}], status: 'In attivazione', urg: 8 },
-        
-        { id: 'equalpay', cat: 'Sociale', num: 'PDR 125 / Direttiva UE 2023/970', name: 'Trasparenza Retributiva e Parità di Genere', 
-          desc: 'Diritti di informazione sui livelli retributivi e obbligo per aziende (>250 dipendenti) di monitorare e colmare divari salariali di genere.', 
-          scadenze: [{d:'7 Giugno 2026', t:'Termine recepimento nazionale'}, {d:'7 Giugno 2027', t:'Primo obbligo reporting aziendale'}], status: 'In attivazione', urg: 7 },
-        
-        { id: 'crma', cat: 'Prodotto', num: 'Regolamento UE 2024/1252', name: 'Critical Raw Materials Act (CRMA)', 
-          desc: 'Garantisce accesso sicuro e sostenibile alle materie prime critiche, fissando target UE di estrazione, riciclo e audit su supply chain.', 
-          scadenze: [{d:'24 Maggio 2025', t:'Entrata in vigore'}, {d:'1 Gennaio 2027', t:'Avvio obblighi audit materiali magnetici'}], status: 'In attivazione', urg: 8 },
-        
-        { id: 'veicoli', cat: 'Prodotto', num: 'Regolamento UE 2024/2041', name: 'Regolamento Omologazione Veicoli', 
-          desc: 'Aggiornamento requisiti tecnici e ambientali (emissioni, sicurezza, Passaporto Digitale) per l\'omologazione dei nuovi veicoli.', 
-          scadenze: [{d:'1 Gennaio 2026', t:'Applicazione obbligatoria dei nuovi requisiti'}], status: 'In attivazione', urg: 9 },
-        
-        { id: 'rating', cat: 'Reporting', num: 'Regolamento UE 2024/3005', name: 'Regolamento Agenzie di Rating ESG', 
-          desc: 'Aumenta trasparenza e integrità dei rating ESG sottoponendo i fornitori alla supervisione ESMA per prevenire conflitti d\'interesse.', 
-          scadenze: [{d:'Dicembre 2024', t:'Approvazione'}, {d:'2025 - 2026', t:'Applicazione progressiva regime autorizzazione'}], status: 'In attivazione', urg: 5 },
-        
-        { id: 'lavoroforzato', cat: 'Supply Chain', num: 'Regolamento UE 2024/3015', name: 'Ban prodotti da lavoro forzato', 
-          desc: 'Vieta l\'immissione e l\'esportazione nel mercato UE di prodotti fabbricati con il ricorso al lavoro forzato, con indagini e sequestri.', 
-          scadenze: [{d:'Fine 2027', t:'Inizio indagini, sequestri e sanzioni a livello europeo'}], status: 'In attivazione', urg: 6 }
+        { id: 'csrd', cat: 'Reporting', num: 'Dir. UE 2022/2464 mod. 2026/470', name: 'Corporate Sustainability Reporting Directive (CSRD)', desc: 'Obbliga le aziende a pubblicare report dettagliati sul proprio impatto ambientale e sociale, seguendo gli standard ESRS.', scadenze: [{d:'1 Gennaio 2024', t:'Applicazione per enti di interesse pubblico >500 dip.'}, {d:'1 Gennaio 2025', t:'Applicazione per grandi imprese (non quotate)'}, {d:'18 Marzo 2026', t:'Omnibus I: semplificazioni e nuove soglie'}], status: 'Vigente', urg: 9 },
+        { id: 'eudr', cat: 'Supply Chain', num: 'Regolamento UE 2023/1115', name: 'EU Deforestation Regulation (EUDR)', desc: 'Vieta l\'immissione sul mercato UE di prodotti associati a deforestazione lungo la filiera.', scadenze: [{d:'30 Dicembre 2025', t:'Applicazione per grandi operatori'}, {d:'30 Giugno 2026', t:'Applicazione per PMI'}], status: 'Vigente', urg: 8 },
+        { id: 'eudrmod', cat: 'Supply Chain', num: 'Direttiva UE 2024/1799', name: 'Modifica EUDR — Disposizioni complementari', desc: 'Apporta modifiche complementari e chiarimenti sulle disposizioni della normativa EUDR originaria.', scadenze: [{d:'30 Dicembre 2025', t:'Applicazione contestuale al Regolamento principale'}], status: 'Vigente', urg: 8 },
+        { id: 'micro', cat: 'Prodotto', num: 'Regolamento UE 2023/2055', name: 'Restrizione Microplastiche (REACH)', desc: 'Vieta la vendita di microplastiche aggiunte intenzionalmente in cosmetici, detergenti, ecc.', scadenze: [{d:'17 Ottobre 2023', t:'Entrata in vigore glitter e microsfere in risciacquo'}, {d:'17 Ottobre 2027-2029', t:'Applicazione progressiva'}], status: 'Vigente', urg: 9 },
+        { id: 'cbam', cat: 'Supply Chain', num: 'Regolamento UE 2023/956', name: 'Carbon Border Adjustment Mechanism (CBAM)', desc: 'Tassa sul carbonio alle frontiere UE per prevenire la rilocalizzazione delle emissioni.', scadenze: [{d:'1 Ottobre 2023', t:'Inizio fase transitoria (reporting trimestrale)'}, {d:'1 Gennaio 2026', t:'Fase definitiva: obbligo acquisto certificati CBAM'}], status: 'Vigente', urg: 10 },
+        { id: 'eco_en', cat: 'Prodotto', num: 'Regolamento UE 2024/301', name: 'Ecodesign ed Etichettatura Energetica', desc: 'Aggiornamento dei requisiti di progettazione ecocompatibile e dell\'etichettatura energetica.', scadenze: [{d:'Giugno 2025', t:'Applicazione primi requisiti specifici di settore'}], status: 'Vigente', urg: 8 },
+        { id: 'batteries', cat: 'Prodotto', num: 'Regolamento UE 2023/1542', name: 'Regolamento Batterie', desc: 'Gestisce l\'intero ciclo di vita delle batterie (progettazione, uso, riciclo), introducendo la due diligence.', scadenze: [{d:'18 Febbraio 2024', t:'Entrata in vigore generale'}, {d:'18 Febbraio 2025', t:'Obblighi due diligence materie prime critiche'}], status: 'Vigente', urg: 9 },
+        { id: 'conflict', cat: 'Supply Chain', num: 'Regolamento UE 2017/821', name: 'Regolamento Minerali di Conflitto', desc: 'Doveri di due diligence per importatori di stagno, tantalio, tungsteno e oro provenienti da zone di conflitto.', scadenze: [{d:'1 Gennaio 2021', t:'Piena applicazione'}], status: 'Vigente', urg: 10 },
+        { id: 'com2011', cat: 'Sociale', num: 'COM 2011/681', name: 'Comunicazione RSI — Responsabilità Sociale d\'Impresa', desc: 'Quadro strategico dell\'UE per promuovere la responsabilità sociale e le pratiche commerciali responsabili.', scadenze: [{d:'2011', t:'Pubblicazione strategia (Applicazione continua)'}], status: 'Vigente', urg: 5 },
+        { id: 'csddd', cat: 'Due Diligence', num: 'Dir. UE 2024/1760 mod. 2026/470', name: 'Corporate Sustainability Due Diligence (CSDDD)', desc: 'Obbligo di individuare, prevenire, mitigare e rendicontare gli impatti negativi su diritti umani e ambiente lungo la catena del valore.', scadenze: [{d:'26 Luglio 2026', t:'Omnibus I: deadline recepimento Stati Membri'}, {d:'2027/2028', t:'Inizio scaglionato obblighi rendicontazione e audit'}], status: 'In attivazione', urg: 7 },
+        { id: 'espr', cat: 'Prodotto', num: 'Regolamento UE 2024/1781', name: 'Ecodesign for Sustainable Products Regulation (ESPR)', desc: 'Quadro per requisiti di progettazione ecocompatibile (durata, riparabilità, riciclo) per quasi tutti i prodotti fisici.', scadenze: [{d:'18 Luglio 2024', t:'Entrata in vigore'}, {d:'2025 - 2027', t:'Adozione atti delegati e applicazione prime categorie merceologiche'}], status: 'In attivazione', urg: 7 },
+        { id: 'ppwr', cat: 'Prodotto', num: 'Regolamento UE 2025/40', name: 'Regolamento Imballaggi e Rifiuti di Imballaggio (PPWR)', desc: 'Nuovi requisiti su riciclabilità obbligatoria, contenuto riciclato minimo, obiettivi di riduzione e riutilizzo degli imballaggi.', scadenze: [{d:'12 Agosto 2025', t:'Entrata in vigore'}, {d:'1 Gennaio 2030', t:'Obiettivi riciclabilità e contenuto riciclato'}], status: 'In attivazione', urg: 6 },
+        { id: 'greenclaims', cat: 'Prodotto', num: 'Direttiva UE 2024/825', name: 'Direttiva Green Claims / Empowering Consumers', desc: 'Protegge i consumatori dal greenwashing vietando dichiarazioni ambientali generiche o non comprovate.', scadenze: [{d:'27 Marzo 2026', t:'Termine recepimento nazionale'}, {d:'27 Settembre 2027', t:'Applicazione completa e inizio sanzioni'}], status: 'In attivazione', urg: 8 },
+        { id: 'equalpay', cat: 'Sociale', num: 'PDR 125 / Direttiva UE 2023/970', name: 'Trasparenza Retributiva e Parità di Genere', desc: 'Diritti di informazione sui livelli retributivi e obbligo per aziende di monitorare e colmare divari salariali di genere.', scadenze: [{d:'7 Giugno 2026', t:'Termine recepimento nazionale'}, {d:'7 Giugno 2027', t:'Primo obbligo reporting aziendale'}], status: 'In attivazione', urg: 7 },
+        { id: 'crma', cat: 'Prodotto', num: 'Regolamento UE 2024/1252', name: 'Critical Raw Materials Act (CRMA)', desc: 'Garantisce accesso sicuro e sostenibile alle materie prime critiche, fissando target UE.', scadenze: [{d:'24 Maggio 2025', t:'Entrata in vigore'}, {d:'1 Gennaio 2027', t:'Avvio obblighi audit materiali magnetici'}], status: 'In attivazione', urg: 8 },
+        { id: 'veicoli', cat: 'Prodotto', num: 'Regolamento UE 2024/2041', name: 'Regolamento Omologazione Veicoli', desc: 'Aggiornamento requisiti tecnici e ambientali (emissioni, sicurezza, Passaporto Digitale) per l\'omologazione.', scadenze: [{d:'1 Gennaio 2026', t:'Applicazione obbligatoria dei nuovi requisiti'}], status: 'In attivazione', urg: 9 },
+        { id: 'rating', cat: 'Reporting', num: 'Regolamento UE 2024/3005', name: 'Regolamento Agenzie di Rating ESG', desc: 'Aumenta trasparenza e integrità dei rating ESG sottoponendo i fornitori alla supervisione ESMA.', scadenze: [{d:'Dicembre 2024', t:'Approvazione'}, {d:'2025 - 2026', t:'Applicazione progressiva regime autorizzazione'}], status: 'In attivazione', urg: 5 },
+        { id: 'lavoroforzato', cat: 'Supply Chain', num: 'Regolamento UE 2024/3015', name: 'Ban prodotti da lavoro forzato', desc: 'Vieta l\'immissione e l\'esportazione nel mercato UE di prodotti fabbricati con il ricorso al lavoro forzato.', scadenze: [{d:'Fine 2027', t:'Inizio indagini, sequestri e sanzioni a livello europeo'}], status: 'In attivazione', urg: 6 }
     ];
 
     const catColors = {
-        'Supply Chain': { c: 'var(--cat-supply)', bg: 'var(--cat-supply-bg)' },
-        'Prodotto': { c: 'var(--cat-prod)', bg: 'var(--cat-prod-bg)' },
-        'Reporting': { c: 'var(--cat-report)', bg: 'var(--cat-report-bg)' },
-        'Due Diligence': { c: 'var(--cat-dd)', bg: 'var(--cat-dd-bg)' },
-        'Sociale': { c: 'var(--cat-soc)', bg: 'var(--cat-soc-bg)' }
+        'Supply Chain': { c: '#10b981', bg: '#d1fae5' },
+        'Prodotto':     { c: '#f59e0b', bg: '#fef3c7' },
+        'Reporting':    { c: '#3b82f6', bg: '#dbeafe' },
+        'Due Diligence':{ c: '#8b5cf6', bg: '#ede9fe' },
+        'Sociale':      { c: '#6366f1', bg: '#e0e7ff' }
     };
 
     function getVal(qId) { const el = document.getElementById(qId); return el ? el.value : 'NO'; }
@@ -384,31 +501,42 @@
         document.getElementById('repCompanyName').innerText = companyName;
         document.getElementById('repSector').innerText = selectedSectors.join(', ');
 
-        // Rilevanza Calcolata
-        let matrixData = [
-            { id: 'csrd', val: calcGap(getVal('q1'), getVal('q1_sub'), 'ESRS', 'GRI') },
-            { id: 'rating', val: calcGap(getVal('q1'), getVal('q1_sub'), 'ESRS', 'GRI') },
-            { id: 'csddd', val: calcGap(getVal('q3'), getVal('q3_sub'), 'Strutturato', null) },
-            { id: 'eudr', val: Math.min(calcGap(getVal('q4'), getVal('q4_sub'), 'DD_Attiva'), calcGap(getVal('q5'), getVal('q5_sub'), 'DD_Attiva')) },
-            { id: 'eudrmod', val: Math.min(calcGap(getVal('q4'), getVal('q4_sub'), 'DD_Attiva'), calcGap(getVal('q5'), getVal('q5_sub'), 'DD_Attiva')) },
-            { id: 'conflict', val: calcGap(getVal('q6'), getVal('q6_sub'), 'Strutturato', null) },
-            { id: 'cbam', val: calcGap(getVal('q7'), getVal('q7_sub'), 'Dichiarazione', 'Monitora') },
-            { id: 'espr', val: getVal('q9') === 'SI' ? 3 : 8 },
-            { id: 'eco_en', val: getVal('q10') === 'SI' ? 3 : 8 },
-            { id: 'micro', val: calcGap(getVal('q11'), getVal('q11_sub'), 'Regolari', 'Sporadici') },
-            { id: 'ppwr', val: calcGap(getVal('q12'), getVal('q12_sub'), 'Implementa', null) },
-            { id: 'greenclaims', val: calcGap(getVal('q13'), getVal('q13_sub'), 'Misure', null) },
-            { id: 'batteries', val: calcGap(getVal('q14'), getVal('q14_sub'), 'Implementate', 'Conosce') },
-            { id: 'crma', val: calcGap(getVal('q15'), getVal('q15_sub'), 'Solo_Riciclate', 'Alcune') },
-            { id: 'equalpay', val: calcGap(getVal('q16'), getVal('q16_sub'), 'Certificazione', 'Monitora') },
-            { id: 'com2011', val: calcGap(getVal('q17'), getVal('q17_sub'), 'Certificazione', 'Monitora') },
-            { id: 'lavoroforzato', val: calcGap(getVal('q3'), getVal('q3_sub'), 'Strutturato', null) },
-            { id: 'veicoli', val: getVal('q8') === 'SI' ? 8 : 1 }
-        ];
+        // Filtro Applicabilità (Se rispondi NO alle attività specifiche, la norma sparisce)
+        let activeNorms = databaseNorme.filter(norm => {
+            if (norm.id === 'batteries' && getVal('q14') !== 'SI') return false;
+            if (norm.id === 'micro' && getVal('q11') !== 'SI') return false;
+            if (norm.id === 'conflict' && getVal('q6') !== 'SI') return false;
+            if (norm.id === 'cbam' && getVal('q7') !== 'SI') return false;
+            if (norm.id === 'eco_en' && getVal('q10') !== 'SI') return false;
+            if (norm.id === 'ppwr' && getVal('q12') !== 'SI') return false;
+            if (norm.id === 'greenclaims' && getVal('q13') !== 'SI') return false;
+            if (norm.id === 'crma' && getVal('q15') !== 'SI') return false;
+            if (norm.id === 'veicoli' && getVal('q8') !== 'SI') return false;
+            if ((norm.id === 'eudr' || norm.id === 'eudrmod') && getVal('q4') !== 'SI' && getVal('q5') !== 'SI') return false;
+            return true;
+        });
 
-        let activeNorms = databaseNorme.map(norm => {
-            let gapObj = matrixData.find(m => m.id === norm.id);
-            let rel = gapObj ? gapObj.val : 5; 
+        // Calcolo Gap e Impatto per le normative applicabili rimaste
+        activeNorms = activeNorms.map(norm => {
+            let rel = 5; // Default fallback
+            
+            // Assegnazione gap specifico per le normative applicabili
+            if (norm.id === 'csrd' || norm.id === 'rating') rel = calcGap(getVal('q1'), getVal('q1_sub'), 'ESRS', 'GRI');
+            else if (norm.id === 'csddd' || norm.id === 'lavoroforzato') rel = calcGap(getVal('q3'), getVal('q3_sub'), 'Strutturato', null);
+            else if (norm.id === 'eudr' || norm.id === 'eudrmod') rel = Math.min(calcGap(getVal('q4'), getVal('q4_sub'), 'DD_Attiva'), calcGap(getVal('q5'), getVal('q5_sub'), 'DD_Attiva'));
+            else if (norm.id === 'conflict') rel = calcGap(getVal('q6'), getVal('q6_sub'), 'Strutturato', null);
+            else if (norm.id === 'cbam') rel = calcGap(getVal('q7'), getVal('q7_sub'), 'Dichiarazione', 'Monitora');
+            else if (norm.id === 'espr') rel = getVal('q9') === 'SI' ? 3 : 8;
+            else if (norm.id === 'eco_en') rel = getVal('q10') === 'SI' ? 3 : 8;
+            else if (norm.id === 'micro') rel = calcGap(getVal('q11'), getVal('q11_sub'), 'Regolari', 'Sporadici');
+            else if (norm.id === 'ppwr') rel = calcGap(getVal('q12'), getVal('q12_sub'), 'Implementa', null);
+            else if (norm.id === 'greenclaims') rel = calcGap(getVal('q13'), getVal('q13_sub'), 'Misure', null);
+            else if (norm.id === 'batteries') rel = calcGap(getVal('q14'), getVal('q14_sub'), 'Implementate', 'Conosce');
+            else if (norm.id === 'crma') rel = calcGap(getVal('q15'), getVal('q15_sub'), 'Solo_Riciclate', 'Alcune');
+            else if (norm.id === 'equalpay') rel = calcGap(getVal('q16'), getVal('q16_sub'), 'Certificazione', 'Monitora');
+            else if (norm.id === 'com2011') rel = calcGap(getVal('q17'), getVal('q17_sub'), 'Certificazione', 'Monitora');
+            else if (norm.id === 'veicoli') rel = getVal('q8') === 'SI' ? 8 : 1;
+
             let impatto = norm.urg * rel; 
             
             let statusBadge = '';
@@ -420,7 +548,7 @@
             return { ...norm, rilevanza: rel, impatto: impatto, statusBadge: statusBadge, dotColor: dotColor };
         });
 
-        // 1. GENERAZIONE AMBITI
+        // 1. AMBITI
         let ambitiHtml = '';
         Object.keys(catColors).forEach(cat => {
             let normsInCat = activeNorms.filter(n => n.cat === cat);
@@ -447,16 +575,15 @@
                 <div class="norm-pills-container">${pills}</div>
             </div>`;
         });
-        document.getElementById('ambitiContainer').innerHTML = ambitiHtml;
+        document.getElementById('ambitiContainer').innerHTML = ambitiHtml || '<p style="color: var(--text-muted);">Nessuna normativa specifica applicabile ai dati inseriti.</p>';
 
-        // 2. GENERAZIONE OBBLIGHI APPLICABILI (ACCORDION)
+        // 2. OBBLIGHI
         activeNorms.sort((a, b) => b.impatto - a.impatto); 
         let obblighiHtml = '';
         activeNorms.forEach(n => {
             let catStyle = `color: ${catColors[n.cat].c}; background-color: ${catColors[n.cat].bg}; border: 1px solid ${catColors[n.cat].c};`;
             let statusStyle = `color: var(--status-${n.statusBadge.toLowerCase()}); background-color: var(--status-${n.statusBadge.toLowerCase()}-bg);`;
             
-            // Genera Scadenze
             let scadenzeHtml = n.scadenze.map(scad => `
                 <div class="scadenza-item avoid-break">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-top:2px; flex-shrink:0;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
@@ -489,19 +616,18 @@
                 </div>
             </div>`;
         });
-        document.getElementById('obblighiContainer').innerHTML = obblighiHtml;
+        document.getElementById('obblighiContainer').innerHTML = obblighiHtml || '<p style="color: var(--text-muted);">Nessuna normativa specifica applicabile ai dati inseriti.</p>';
 
         // 3. MATRICE STRATEGICA
-        // Algoritmo JITTER SISTEMATICO per evitare sormonti grafici mantenendo il colore
         let pointMap = {};
         activeNorms.forEach(d => {
             let key = `${d.urg}_${d.rilevanza}`;
             if(pointMap[key]) {
                 pointMap[key] += 1;
-                let offset = 0.3 * pointMap[key]; 
-                // Deviazione fissa a raggiera
-                d.urg_plot = d.urg + (offset * (Math.random() > 0.5 ? 1 : -1));
-                d.ril_plot = d.rilevanza + (offset * (Math.random() > 0.5 ? 1 : -1));
+                let angle = pointMap[key] * (Math.PI / 4); 
+                let r = 0.45; 
+                d.urg_plot = d.urg + (Math.cos(angle) * r);
+                d.ril_plot = d.rilevanza + (Math.sin(angle) * r);
             } else {
                 pointMap[key] = 1;
                 d.urg_plot = d.urg; d.ril_plot = d.rilevanza;
@@ -517,7 +643,7 @@
                     label: 'Normative',
                     data: activeNorms.map(n => ({ x: n.urg_plot, y: n.ril_plot, name: n.name.split(' (')[0], color: catColors[n.cat].c })),
                     backgroundColor: activeNorms.map(n => catColors[n.cat].c),
-                    pointRadius: 9, pointHoverRadius: 12 // Punti leggermente più grandi
+                    pointRadius: 10, pointHoverRadius: 13 
                 }]
             },
             options: {
@@ -525,7 +651,8 @@
                 plugins: {
                     datalabels: {
                         align: 'top', anchor: 'end', color: '#1e293b', font: { weight: '600', size: 10, family: 'Inter' },
-                        formatter: function(value) { return value.name; }
+                        formatter: function(value) { return value.name; },
+                        offset: 4 
                     },
                     tooltip: { callbacks: { label: function(ctx) { return ctx.raw.name; } } }
                 },
@@ -536,7 +663,7 @@
             }
         });
 
-        // 4. DATABASE NORMATIVO
+        // 4. DATABASE
         let dbHtml = '';
         let countV = 0, countA = 0;
         
@@ -562,11 +689,10 @@
             </div>`;
         });
         
-        document.getElementById('databaseContainer').innerHTML = dbHtml;
+        document.getElementById('databaseContainer').innerHTML = dbHtml || '<p style="color: var(--text-muted);">Nessuna normativa specifica applicabile ai dati inseriti.</p>';
         document.getElementById('countVigenti').innerText = countV;
         document.getElementById('countAttive').innerText = countA;
 
-        // Switch Visibilità
         document.getElementById('inputSection').style.display = 'none';
         document.getElementById('reportSection').style.display = 'block';
     }
@@ -574,39 +700,32 @@
     function exportPDF() {
         const element = document.getElementById('printableReport');
         
-        // 1. FORZA APERTURA ACCORDION PER PDF
         const cards = element.querySelectorAll('.obbligo-card');
         cards.forEach(card => {
             card.classList.add('open');
             card.querySelector('.obbligo-details').style.display = 'block';
         });
 
-        // 2. CORREZIONE MARGINI PDF: Fix larghezza rigida per evitare tagli
-        // html2pdf renderizza la finestra in base a questo, jsPDF poi scala
         element.style.width = '1200px'; 
         element.style.padding = '30px';
         
         const opt = {
-            margin:       10, // Margini fisici sul foglio A4 (mm)
+            margin:       10, 
             filename:     'SustainLEX_Report_Dettagliato.pdf',
             image:        { type: 'jpeg', quality: 1 },
             html2canvas:  { 
                 scale: 2, 
                 scrollY: 0, 
                 useCORS: true, 
-                windowWidth: 1280 // Forza viewport desktop per calcolo corretto barre/accordion
+                windowWidth: 1280 
             },
             jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' },
             pagebreak:    { mode: ['css', 'legacy'], before: '.page-break', avoid: '.avoid-break' }
         };
 
-        // Genera PDF e resetta stili
         html2pdf().set(opt).from(element).save().then(() => {
-            // Ripristina stato originale
             element.style.width = 'auto'; 
             element.style.padding = '0';
-            // Chiude accordion (torna allo stato di UI)
-            // cards.forEach(card => { card.classList.remove('open'); card.querySelector('.obbligo-details').style.display = 'none'; });
         });
     }
 </script>
