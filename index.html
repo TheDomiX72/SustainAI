@@ -140,17 +140,26 @@
             
             <div class="form-group">
                 <label>Settore (Selezione multipla - tieni premuto Ctrl/Cmd)</label>
-                <select id="sector" multiple size="6">
-                    <option value="Agricoli e alimentari" selected>Prodotti agricoli e alimentari</option>
-                    <option value="Chimici">Prodotti chimici</option>
-                    <option value="Plastiche e gomma">Materie plastiche e gomma</option>
-                    <option value="Tessili">Prodotti tessili</option>
-                    <option value="Metalli">Metalli e prodotti metallici</option>
-                    <option value="Macchinari">Macchinari e apparecchiature</option>
-                    <option value="Elettronica">Apparecchiature elettroniche ed elettrodomestici</option>
-                    <option value="Servizi">Servizi</option>
-                    <option value="Altro">Altro da specificare</option>
+                <select id="sector" multiple size="8" onchange="toggleSectorOther()">
+                    <option value="prodotti agricoli e alimentari" selected>prodotti agricoli e alimentari</option>
+                    <option value="prodotti chimici">prodotti chimici</option>
+                    <option value="Materie plastiche e gomma">Materie plastiche e gomma</option>
+                    <option value="prodotti tessili">prodotti tessili</option>
+                    <option value="metalli e prodotti metallici">metalli e prodotti metallici</option>
+                    <option value="macchinari e apparecchiature">macchinari e apparecchiature</option>
+                    <option value="minerali e combustibili">minerali e combustibili</option>
+                    <option value="legno e prodotti in legno">legno e prodotti in legno</option>
+                    <option value="articoli in pelle e calzature">articoli in pelle e calzature</option>
+                    <option value="prodotti minerali e materiali da costruzione">prodotti minerali e materiali da costruzione</option>
+                    <option value="prodotti farmaceutici">prodotti farmaceutici</option>
+                    <option value="prodotti cosmetici">prodotti cosmetici</option>
+                    <option value="veicoli e mezzi di trasporto">veicoli e mezzi di trasporto</option>
+                    <option value="apparecchiature elettroniche ed elettrodomestici">apparecchiature elettroniche ed elettrodomestici</option>
+                    <option value="prodotti dell'industria cartaria">prodotti dell'industria cartaria</option>
+                    <option value="servizi">servizi</option>
+                    <option value="Altro">altro da specificare</option>
                 </select>
+                <input type="text" id="sectorOther" maxlength="30" class="conditional-select" placeholder="Specifica settore (max 30 caratteri)">
             </div>
             <div class="form-group"><label>Numero dipendenti</label><input type="number" id="employees" value="250"></div>
             <div class="form-group"><label>Fatturato Annuale (€)</label><input type="number" id="revenue" value="50000000"></div>
@@ -436,6 +445,18 @@
         if (parent.value !== triggerValue) sub.value = ''; 
     }
 
+    function toggleSectorOther() {
+        const sectorSelect = document.getElementById('sector');
+        const sectorOtherInput = document.getElementById('sectorOther');
+        const selectedOptions = Array.from(sectorSelect.selectedOptions).map(opt => opt.value);
+        if (selectedOptions.includes('Altro')) {
+            sectorOtherInput.style.display = 'block';
+        } else {
+            sectorOtherInput.style.display = 'none';
+            sectorOtherInput.value = '';
+        }
+    }
+
     function toggleAccordion(element) {
         const card = element.parentElement;
         const details = card.querySelector('.obbligo-details');
@@ -478,6 +499,21 @@
         'Sociale':      { c: '#6366f1', bg: '#e0e7ff' }
     };
 
+    const normSectorMap = {
+        'csrd': ['Tutti'], 'csddd': ['Tutti'], 'ppwr': ['Tutti'], 'greenclaims': ['Tutti'], 'equalpay': ['Tutti'], 'rating': ['Tutti'], 'lavoroforzato': ['Tutti'], 'com2011': ['Tutti'],
+        'espr': ['prodotti chimici', 'Materie plastiche e gomma', 'prodotti tessili', 'metalli e prodotti metallici', 'macchinari e apparecchiature', 'legno e prodotti in legno', 'articoli in pelle e calzature', 'prodotti minerali e materiali da costruzione', 'veicoli e mezzi di trasporto', 'apparecchiature elettroniche ed elettrodomestici', 'prodotti dell\'industria cartaria'],
+        'eudr': ['prodotti agricoli e alimentari', 'Materie plastiche e gomma', 'legno e prodotti in legno', 'prodotti cosmetici', 'prodotti dell\'industria cartaria'],
+        'eudrmod': ['prodotti agricoli e alimentari', 'Materie plastiche e gomma', 'legno e prodotti in legno', 'prodotti cosmetici', 'prodotti dell\'industria cartaria'],
+        'r2r': ['macchinari e apparecchiature', 'veicoli e mezzi di trasporto', 'apparecchiature elettroniche ed elettrodomestici'],
+        'micro': ['prodotti agricoli e alimentari', 'prodotti chimici', 'Materie plastiche e gomma', 'prodotti tessili', 'articoli in pelle e calzature', 'prodotti farmaceutici', 'prodotti cosmetici'],
+        'cbam': ['prodotti chimici', 'metalli e prodotti metallici', 'minerali e combustibili', 'prodotti minerali e materiali da costruzione'],
+        'batteries': ['macchinari e apparecchiature', 'veicoli e mezzi di trasporto', 'apparecchiature elettroniche ed elettrodomestici'],
+        'crma': ['prodotti chimici', 'metalli e prodotti metallici', 'macchinari e apparecchiature', 'minerali e combustibili', 'veicoli e mezzi di trasporto', 'apparecchiature elettroniche ed elettrodomestici'],
+        'conflict': ['metalli e prodotti metallici', 'veicoli e mezzi di trasporto', 'apparecchiature elettroniche ed elettrodomestici'],
+        'veicoli': ['veicoli e mezzi di trasporto'],
+        'eco_en': ['macchinari e apparecchiature', 'apparecchiature elettroniche ed elettrodomestici']
+    };
+
     function getVal(qId) { const el = document.getElementById(qId); return el ? el.value : 'NO'; }
     function calcGap(qVal, subVal, good1, good2) {
         if (qVal !== 'SI') return 9; 
@@ -496,13 +532,26 @@
 
     function generateReport() {
         const companyName = document.getElementById('companyName').value || "Azienda Non Specificata";
-        const selectedSectors = Array.from(document.getElementById('sector').selectedOptions).map(opt => opt.text);
+        let selectedSectorsText = Array.from(document.getElementById('sector').selectedOptions).map(opt => {
+            if(opt.value === 'Altro') {
+                return document.getElementById('sectorOther').value || "Altro settore";
+            }
+            return opt.text;
+        });
+        
+        let selectedSectorsValues = Array.from(document.getElementById('sector').selectedOptions).map(opt => opt.value);
         
         document.getElementById('repCompanyName').innerText = companyName;
-        document.getElementById('repSector').innerText = selectedSectors.join(', ');
+        document.getElementById('repSector').innerText = selectedSectorsText.join(', ');
 
-        // Filtro Applicabilità (Se rispondi NO alle attività specifiche, la norma sparisce)
+        // Filtro Applicabilità (Se rispondi NO o il settore non e' compatibile, la norma sparisce)
         let activeNorms = databaseNorme.filter(norm => {
+            // Controlla prima il settore
+            const allowedSectors = normSectorMap[norm.id] || ['Tutti'];
+            let isSectorApplicable = allowedSectors.includes('Tutti') || selectedSectorsValues.some(sector => allowedSectors.includes(sector));
+            if (!isSectorApplicable && !selectedSectorsValues.includes('Altro')) return false; // Se "Altro" è selezionato teniamo di default tutte le norme attive per non escludere erroneamente.
+
+            // Poi controlla il questionario
             if (norm.id === 'batteries' && getVal('q14') !== 'SI') return false;
             if (norm.id === 'micro' && getVal('q11') !== 'SI') return false;
             if (norm.id === 'conflict' && getVal('q6') !== 'SI') return false;
@@ -513,6 +562,7 @@
             if (norm.id === 'crma' && getVal('q15') !== 'SI') return false;
             if (norm.id === 'veicoli' && getVal('q8') !== 'SI') return false;
             if ((norm.id === 'eudr' || norm.id === 'eudrmod') && getVal('q4') !== 'SI' && getVal('q5') !== 'SI') return false;
+            
             return true;
         });
 
@@ -520,7 +570,6 @@
         activeNorms = activeNorms.map(norm => {
             let rel = 5; // Default fallback
             
-            // Assegnazione gap specifico per le normative applicabili
             if (norm.id === 'csrd' || norm.id === 'rating') rel = calcGap(getVal('q1'), getVal('q1_sub'), 'ESRS', 'GRI');
             else if (norm.id === 'csddd' || norm.id === 'lavoroforzato') rel = calcGap(getVal('q3'), getVal('q3_sub'), 'Strutturato', null);
             else if (norm.id === 'eudr' || norm.id === 'eudrmod') rel = Math.min(calcGap(getVal('q4'), getVal('q4_sub'), 'DD_Attiva'), calcGap(getVal('q5'), getVal('q5_sub'), 'DD_Attiva'));
