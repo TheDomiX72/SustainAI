@@ -91,16 +91,23 @@
         .hero-badge {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            padding: 6px 14px;
-            background-color: rgba(16, 185, 129, 0.15);
-            color: #34d399;
-            border: 1px solid rgba(16, 185, 129, 0.2);
-            border-radius: 20px;
-            font-size: 11px;
+            gap: 10px; /* Aumentato gap per ospitare l'immagine più grande */
+            padding: 8px 16px; /* Aumentato padding */
+            background-color: rgba(255, 255, 255, 0.1); /* Sfondo leggermente più chiaro per far risaltare il logo */
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 24px;
+            font-size: 12px; /* Leggermente aumentato font size del badge text */
             font-weight: 700;
             letter-spacing: 0.5px;
             margin-bottom: 24px;
+        }
+
+        /* Stile specifico per il logo tecno nel badge con dimensione doppia */
+        .hero-badge-logo {
+            height: 28px; /* Dimensione doppia rispetto al testo e al vecchio segnaposto */
+            width: auto;
+            object-fit: contain;
         }
 
         .hero h1 {
@@ -243,7 +250,8 @@
 
     <section class="hero">
         <div class="hero-badge">
-            <span style="font-size: 8px;">●</span> EU SUSTAINABILITY COMPLIANCE
+            <img src="Tecno ESG.png" alt="Tecno Group Logo" class="hero-badge-logo">
+            EU SUSTAINABILITY COMPLIANCE
         </div>
         <h1>Naviga la compliance <span>sostenibilità</span> europea</h1>
         <p>Strumento avanzato per valutare il livello di conformità della tua azienda rispetto alle principali normative UE in materia di sostenibilità ambientale e sociale.</p>
